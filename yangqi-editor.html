@@ -1,0 +1,2964 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>扬旗而行·编辑部</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    /* 扬旗而行品牌色系 */
+    --brand-primary: #1E3A5F;
+    --brand-primary-dark: #152A45;
+    --brand-primary-light: #E8F4FD;
+    --brand-accent: #D4A574;
+    --brand-accent-light: #FDF6ED;
+    --flag-red: #C84A3E;
+    --success: #057a55;
+    --success-light: #def7ec;
+    --warning: #c27803;
+    --warning-light: #fdf6b2;
+    --danger: #c81e1e;
+    --danger-light: #fde8e8;
+    --text-primary: #1E293B;
+    --text-secondary: #64748B;
+    --text-muted: #94A3B8;
+    --border: #E2E8F0;
+    --bg-page: #F8FAFC;
+    --bg-card: #ffffff;
+    --line-life: #8B5CF6;
+    --line-reading: #3B82F6;
+    --line-business: #F59E0B;
+    --line-ai: #10B981;
+    --line-parenting: #EC4899;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-page);
+    color: var(--text-primary);
+    min-height: 100vh;
+  }
+
+  /* ===== 顶部导航 ===== */
+  .topbar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 56px;
+    background: var(--brand-primary-dark);
+    display: flex; align-items: center;
+    padding: 0 24px;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+  .brand { font-size: 16px; font-weight: 700; color: white; white-space: nowrap; margin-right: 32px; }
+  .brand span { color: #93c5fd; }
+  .tab-nav { display: flex; gap: 4px; flex: 1; justify-content: center; }
+  .tab-btn {
+    padding: 6px 20px; border-radius: 6px; font-size: 14px; font-weight: 500;
+    color: rgba(255,255,255,0.7); cursor: pointer; transition: all 0.15s;
+    border: none; background: transparent;
+  }
+  .tab-btn:hover { color: white; background: rgba(255,255,255,0.1); }
+  .tab-btn.active { color: white; background: var(--brand-primary); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; margin-left: 32px; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 8px; border: none;
+    background: rgba(255,255,255,0.1); color: white; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s; font-size: 18px;
+  }
+  .icon-btn:hover { background: rgba(255,255,255,0.2); }
+  .version-badge {
+    padding: 3px 8px; background: rgba(255,255,255,0.12);
+    border-radius: 6px; font-size: 11px; font-weight: 600;
+    color: rgba(255,255,255,0.6); letter-spacing: 0.3px; white-space: nowrap;
+  }
+
+  /* ===== 主内容区 ===== */
+  .main { margin-top: 56px; padding: 24px; min-height: calc(100vh - 56px); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ===== 今日上下文看板 ===== */
+  .context-banner {
+    background: linear-gradient(135deg, var(--brand-primary-dark) 0%, var(--brand-primary) 100%);
+    border-radius: 16px; padding: 20px 24px;
+    color: white; margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(30,58,95,0.25);
+  }
+  .context-banner-top {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .context-date { font-size: 16px; font-weight: 600; }
+  .context-day-badge {
+    background: rgba(255,255,255,0.2); border-radius: 20px;
+    padding: 3px 10px; font-size: 12px; font-weight: 600;
+  }
+  .context-themes {
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  }
+  .context-theme-tag {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.15); border-radius: 8px;
+    padding: 5px 12px; font-size: 13px;
+  }
+  .context-theme-tag .label { opacity: 0.7; font-size: 11px; }
+  .context-theme-tag .value { font-weight: 600; }
+  .context-gaps {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;
+  }
+  .context-gap-tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 20px;
+    background: rgba(255,255,255,0.1); opacity: 0.75;
+  }
+
+  /* ===== 入口切换 ===== */
+  .entry-switcher {
+    display: flex; gap: 8px; margin-bottom: 20px;
+    padding: 4px; background: #f1f5f9; border-radius: 12px;
+    width: fit-content;
+  }
+  .entry-btn {
+    padding: 8px 20px; border-radius: 9px; border: none;
+    font-size: 14px; font-weight: 500; cursor: pointer;
+    transition: all 0.2s;
+  }
+  .entry-btn.active {
+    background: var(--brand-primary); color: white;
+    box-shadow: 0 2px 8px rgba(30,58,95,0.25);
+  }
+  .entry-btn.inactive {
+    background: transparent; color: var(--text-secondary);
+  }
+  .entry-btn.inactive:hover { color: var(--text-primary); }
+
+  /* ===== 模式切换胶囊 ===== */
+  .btn-pill {
+    padding: 10px 16px; border-radius: 10px; border: 1.5px solid var(--border);
+    background: white; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .btn-pill:hover { border-color: var(--brand-primary); color: var(--brand-primary); }
+  .btn-pill.active {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary);
+    color: white;
+    box-shadow: 0 2px 8px rgba(30,58,95,0.25);
+  }
+
+  /* ===== 胶囊选择器 ===== */
+  .pill-group {
+    display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .pill {
+    padding: 7px 16px; border-radius: 20px; border: 1.5px solid var(--border);
+    background: white; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .pill:hover { border-color: var(--brand-primary); color: var(--brand-primary); }
+  .pill.selected {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary); color: white;
+  }
+
+  /* ===== 卡片 ===== */
+  .card {
+    background: var(--bg-card); border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .card-body { padding: 24px; }
+
+  /* ===== 表单 ===== */
+  .form-group { margin-bottom: 18px; }
+  .form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 6px; }
+  .form-label .required { color: var(--danger); margin-left: 2px; }
+  .form-input, .form-textarea {
+    width: 100%; padding: 10px 14px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 14px; color: var(--text-primary);
+    background: white; transition: border-color 0.15s, box-shadow 0.15s;
+    outline: none; font-family: inherit;
+  }
+  .form-input:focus, .form-textarea:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 3px rgba(30,58,95,0.1);
+  }
+  .form-textarea { resize: vertical; min-height: 120px; }
+  .form-input.error, .form-textarea.error { border-color: var(--danger); }
+  .form-error { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
+  .form-error.show { display: block; }
+
+  /* ===== 主按钮 ===== */
+  .btn-main {
+    width: 100%; padding: 15px 24px;
+    background: var(--brand-primary); color: white;
+    border: none; border-radius: 12px;
+    font-size: 16px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    box-shadow: 0 4px 14px rgba(30,58,95,0.35);
+  }
+  .btn-main:hover {
+    background: var(--brand-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(30,58,95,0.4);
+  }
+  .btn-main:active { transform: translateY(0); }
+  .btn-main:disabled {
+    background: #9ca3af; cursor: not-allowed;
+    transform: none; box-shadow: none;
+  }
+
+  /* ===== 副按钮 ===== */
+  .btn-secondary {
+    padding: 8px 16px; background: white;
+    color: var(--text-primary); border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 13px; font-weight: 500;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--brand-primary); color: var(--brand-primary); }
+  .btn-copy {
+    padding: 5px 12px; background: var(--brand-primary-light);
+    color: var(--brand-primary); border: none; border-radius: 6px;
+    font-size: 12px; font-weight: 500; cursor: pointer;
+    transition: all 0.15s; white-space: nowrap;
+  }
+  .btn-copy:hover { background: var(--brand-primary); color: white; }
+  .btn-copy.copied { background: var(--success-light); color: var(--success); }
+
+  /* ===== 加载动画 ===== */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(255,255,255,0.3); border-top-color: white;
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== 单行进度提示 ===== */
+  .write-status {
+    display: flex; align-items: center; gap: 10px;
+    padding: 14px 18px; border-radius: 12px;
+    background: var(--brand-primary-light);
+    border: 1px solid #c8dff7;
+    font-size: 14px; color: var(--brand-primary);
+    margin-bottom: 16px;
+  }
+  .write-status .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--brand-primary);
+    animation: blink 1s infinite;
+    flex-shrink: 0;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* ===== 终稿输出区 ===== */
+  .output-card {
+    background: var(--bg-card); border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    overflow: hidden; animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+  .output-header {
+    padding: 16px 20px; background: var(--brand-primary);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .output-header-left { display: flex; align-items: center; gap: 10px; }
+  .output-header-title { font-size: 14px; font-weight: 600; color: white; }
+  .output-header-badge {
+    padding: 2px 10px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    white-space: nowrap;
+  }
+  .output-header-actions { display: flex; gap: 8px; }
+
+  .output-body { padding: 24px; }
+
+  .output-title {
+    font-size: 20px; font-weight: 700; color: var(--text-primary);
+    line-height: 1.5; margin-bottom: 20px;
+  }
+  .output-subtitle {
+    font-size: 15px; color: var(--text-secondary); margin-top: -12px; margin-bottom: 20px;
+  }
+
+  /* ===== 公众号高级感排版 ===== */
+  .output-article {
+    padding: 20px 20px 24px;
+    font-size: 15px;
+    line-height: 1.85;
+    color: #3a3a3a;
+  }
+  /* 普通段落 */
+  .output-article p {
+    margin: 0 0 1.5em 0;
+    padding: 0;
+    line-height: 1.85;
+    font-size: 15px;
+    color: #3a3a3a;
+    text-indent: 0 !important;
+  }
+  /* 首段：开篇引导，稍大且色浅 */
+  .output-article p.article-lead {
+    font-size: 15.5px;
+    color: #4a4a4a;
+    line-height: 1.9;
+    margin-bottom: 1.6em;
+  }
+  /* 小标题 */
+  .output-article h3.article-subheading {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--brand-primary, #1E3A5F);
+    margin: 2em 0 0.6em 0;
+    padding: 0;
+    line-height: 1.4;
+    text-indent: 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .output-article h3.article-subheading::before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 18px;
+    background: var(--brand-accent, #D4A574);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+  /* 段落内br换行 */
+  .output-article p br { display: block; content: ""; }
+  /* 金句引用块：整段都是「」金句时，用引用卡片样式 */
+  .output-article .article-quote-block {
+    margin: 1.4em 0;
+    padding: 14px 18px;
+    background: #fafafa;
+    border-left: 3px solid var(--brand-accent, #D4A574);
+    border-radius: 0 8px 8px 0;
+    font-size: 15px;
+    color: #555;
+    line-height: 1.85;
+    font-style: italic;
+  }
+  /* 行内金句「」 */
+  .output-article .gold-quote {
+    color: var(--brand-accent, #D4A574);
+    font-weight: 600;
+    font-style: normal;
+  }
+  /* 关键词高亮：统一用品牌主色，只高亮转折词 */
+  .output-article .kw-transition {
+    color: var(--brand-primary, #1E3A5F);
+    font-weight: 700;
+  }
+  /* 核心概念、序数词：柔和灰色，不抢眼 */
+  .output-article .kw-core,
+  .output-article .kw-num {
+    color: #888;
+    font-weight: 600;
+  }
+  .output-article .kw-question {
+    color: var(--brand-accent, #D4A574);
+    font-weight: 600;
+  }
+
+  /* 旗和互动句高亮 */
+  .output-flag {
+    padding: 14px 18px; border-radius: 12px;
+    background: var(--brand-accent-light);
+    border-left: 4px solid var(--brand-accent);
+    margin-bottom: 10px;
+  }
+  .output-flag-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+  .output-flag-text { font-size: 15px; font-weight: 600; color: var(--brand-accent); }
+
+  .output-interaction {
+    padding: 12px 18px; border-radius: 12px;
+    background: var(--brand-primary-light);
+    border-left: 4px solid var(--brand-primary);
+    margin-bottom: 16px;
+  }
+  .output-interaction-label { font-size: 11px; color: var(--text-secondary); margin-bottom: 4px; }
+  .output-interaction-text { font-size: 14px; color: var(--brand-primary); font-weight: 500; }
+
+  /* 标题推荐卡片 */
+  .title-card {
+    padding: 10px 14px; border-radius: 12px;
+    border: 2px solid var(--border); background: white;
+    cursor: pointer; transition: all 0.2s;
+    overflow: hidden;
+  }
+  .title-card:hover {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-light);
+  }
+  .title-card.selected {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary);
+    box-shadow: 0 4px 12px rgba(30,58,95,0.2);
+  }
+  .title-card.selected .title-card-text {
+    color: white !important;
+    font-weight: 700;
+  }
+  .title-card.selected .title-card-reason {
+    display: block !important;
+    color: rgba(255,255,255,0.8) !important;
+  }
+  .title-card.selected .title-card-index {
+    background: rgba(255,255,255,0.25) !important;
+    color: white !important;
+  }
+  /* 未选中卡片折叠理由 */
+  .title-card-reason {
+    display: none;
+    font-size: 12px;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  /* 首屏摘要 */
+  .output-digest {
+    padding: 16px 18px; border-radius: 12px;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid var(--warning);
+    margin-bottom: 16px;
+  }
+
+  /* 封面提示词区域 */
+  .output-cover-section {
+    margin-top: 20px; padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .cover-prompt-card {
+    padding: 16px; border-radius: 12px;
+    background: var(--bg-page); border: 1px solid var(--border);
+  }
+  .cover-prompt-text {
+    font-size: 13px; color: var(--text-primary);
+    line-height: 1.5; padding: 10px;
+    background: white; border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+  .btn-cover {
+    flex: 1; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: white;
+    font-size: 12px; font-weight: 500; color: var(--text-secondary);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-cover:hover {
+    border-color: var(--brand-primary); color: var(--brand-primary);
+  }
+  .btn-cover-generate {
+    background: var(--brand-primary); color: white;
+    border-color: var(--brand-primary);
+  }
+  .btn-cover-generate:hover {
+    background: var(--brand-primary-dark);
+    border-color: var(--brand-primary-dark);
+    color: white;
+  }
+
+  /* 封面生成中的加载状态 */
+  .cover-generating {
+    opacity: 0.7; pointer-events: none;
+  }
+
+  /* 迭代优化入口 */
+  .refine-section {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .refine-section textarea {
+    background: #fff;
+  }
+
+  /* 重新排版入口 */
+  .layout-section {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .layout-section textarea {
+    background: #fff;
+  }
+  .cover-generated-img {
+    margin-top: 12px; border-radius: 8px;
+    width: 100%; max-height: 200px; object-fit: cover;
+  }
+  .cover-download-btn {
+    display: block; margin-top: 8px; padding: 8px 12px;
+    background: var(--success); color: white;
+    border: none; border-radius: 8px; font-size: 12px;
+    cursor: pointer; text-align: center;
+    text-decoration: none;
+  }
+  .cover-download-btn:hover {
+    background: #047857;
+  }
+
+  /* 合规小标签 */
+  .compliance-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 12px; font-weight: 500;
+  }
+  .compliance-chip.low { background: var(--success-light); color: var(--success); }
+  .compliance-chip.mid { background: var(--warning-light); color: var(--warning); }
+  .compliance-chip.high { background: var(--danger-light); color: var(--danger); }
+
+  .output-footer {
+    padding: 16px 20px; border-top: 1px solid var(--border);
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+
+  /* 流式输出光标 */
+  .typing-cursor { display: inline-block; width: 2px; height: 1em; background: var(--brand-primary); margin-left: 1px; animation: blink 0.8s infinite; vertical-align: text-bottom; }
+
+  /* ===== 历史列表 ===== */
+  .history-item {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 16px;
+    transition: background 0.15s; cursor: pointer;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-item:hover { background: #f9fafb; }
+  .history-topic { flex: 1; font-size: 14px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .history-meta { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
+  .badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .badge-life { background: rgba(139,92,246,0.12); color: #7c3aed; }
+  .badge-reading { background: rgba(59,130,246,0.12); color: #2563eb; }
+  .badge-business { background: rgba(245,158,11,0.12); color: #d97706; }
+  .badge-ai { background: rgba(16,185,129,0.12); color: #059669; }
+  .badge-parenting { background: rgba(236,72,153,0.12); color: #db2777; }
+  .badge-gray { background: #f3f4f6; color: var(--text-secondary); }
+  .badge-green { background: var(--success-light); color: var(--success); }
+
+  /* ===== 900天进度 ===== */
+  .progress-day-item { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .progress-day-item:last-child { border-bottom: none; }
+  .lead-id { font-size: 12px; color: var(--text-secondary); font-family: monospace; }
+  .stage-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--border); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: var(--text-secondary); transition: all 0.2s; }
+  .stage-dot.active { background: var(--brand-primary); color: white; }
+  .stage-dot.done { background: var(--success); color: white; }
+
+  /* ===== 弹窗 ===== */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: white; border-radius: 16px; width: 480px; max-width: calc(100vw - 48px); box-shadow: 0 20px 60px rgba(0,0,0,0.15); overflow: hidden; }
+  .modal-header { padding: 20px 24px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-title { font-size: 16px; font-weight: 700; }
+  .modal-close { width: 32px; height: 32px; border-radius: 8px; border: none; background: #f3f4f6; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+  .modal-close:hover { background: var(--border); }
+  .modal-body { padding: 20px 24px; }
+  .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ===== Toast ===== */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 500;
+    color: white; background: #111928; box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    z-index: 999; transform: translateY(20px); opacity: 0;
+    transition: all 0.3s; pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: var(--success); }
+  .toast.error { background: var(--danger); }
+
+  /* ===== 空状态 ===== */
+  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-secondary); }
+  .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .empty-desc { font-size: 13px; }
+
+  /* ===== 折叠区 ===== */
+  .collapse-section { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-top: 12px; }
+  .collapse-header { padding: 12px 16px; background: #f9fafb; cursor: pointer; display: flex; align-items: center; justify-content: space-between; font-size: 13px; font-weight: 500; transition: background 0.15s; }
+  .collapse-header:hover { background: #f3f4f6; }
+  .collapse-arrow { transition: transform 0.2s; font-size: 12px; }
+  .collapse-section.open .collapse-arrow { transform: rotate(180deg); }
+  .collapse-body { display: none; padding: 16px; font-size: 13px; line-height: 1.7; }
+  .collapse-section.open .collapse-body { display: block; }
+
+  /* ===== 选题卡片 ===== */
+  .suggest-card {
+    background: white; border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 14px; cursor: pointer; transition: all 0.15s;
+  }
+  .suggest-card:hover { border-color: var(--brand-primary); box-shadow: 0 4px 12px rgba(30,58,95,0.1); transform: translateY(-1px); }
+
+  /* ===== 合规风险 ===== */
+  .risk-text { color: var(--danger); background: #fde8e8; padding: 1px 3px; border-radius: 3px; }
+
+  /* ===== 响应式 ===== */
+  @media (max-width: 768px) {
+    body { padding: 12px; }
+    .tab-btn { padding: 8px 12px; font-size: 13px; }
+    .context-banner { padding: 16px; }
+    .context-themes { flex-direction: column; align-items: flex-start; }
+    .output-header { flex-direction: column; align-items: flex-start; }
+    .output-footer { flex-direction: column; }
+  }
+
+  /* 滚动条 */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+</style>
+</head>
+<body>
+
+<!-- ===== 顶部导航 ===== -->
+<header class="topbar">
+  <div class="brand">扬旗而行<span>·编辑部</span></div>
+  <nav class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('generate')">📝 写稿工作台</button>
+    <button class="tab-btn" onclick="switchTab('history')">📚 内容历史</button>
+    <button class="tab-btn" onclick="switchTab('progress')">🚩 900天进度</button>
+  </nav>
+  <div class="topbar-right">
+    <span class="version-badge">v1.6</span>
+    <button class="icon-btn" onclick="openApiModal()" title="API设置">⚙️</button>
+  </div>
+</header>
+
+<!-- ===== Toast ===== -->
+<div class="toast" id="toast"></div>
+
+<!-- ===== API Key 弹窗 ===== -->
+<div class="modal-overlay" id="apiModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">⚙️ API 配置</div>
+      <button class="modal-close" onclick="closeApiModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="background:var(--brand-primary-light);border:1px solid #c8dff7;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;line-height:1.8;color:#4a6fa5">
+        <strong>写作模型</strong>（主Agent）：DeepSeek，负责内容识别、优化、润色、格式输出<br>
+        <strong>合规模型</strong>（后台并行）：智谱GLM-4-Flash，负责内容合规审查
+      </div>
+      <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">写作模型 · DeepSeek</div>
+      <div class="form-group">
+        <label class="form-label">DeepSeek API Key<span class="required">*</span></label>
+        <input class="form-input" type="password" id="key-deepseek" placeholder="sk-xxxxxxxxxxxxxxxx">
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:18px">
+        前往 <a href="https://platform.deepseek.com" target="_blank" style="color:var(--brand-primary)">platform.deepseek.com</a> 获取
+      </div>
+      <div style="border-top:1px solid var(--border);margin:4px 0 18px"></div>
+      <div style="font-size:12px;font-weight:600;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">合规模型 · 智谱</div>
+      <div class="form-group">
+        <label class="form-label">智谱 API Key</label>
+        <input class="form-input" type="password" id="key-zhipu" placeholder="输入智谱 API Key...">
+      </div>
+      <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">
+        前往 <a href="https://open.bigmodel.cn" target="_blank" style="color:var(--brand-primary)">open.bigmodel.cn</a> 注册，GLM-4-Flash 免费额度充足
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeApiModal()">取消</button>
+      <button class="btn-main" style="width:auto;padding:10px 24px;font-size:14px" onclick="saveApiKey()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 历史详情弹窗 ===== -->
+<div class="modal-overlay" id="historyModal">
+  <div class="modal" style="width:720px;max-width:calc(100vw - 48px);max-height:85vh;overflow-y:auto">
+    <div class="modal-header" style="position:sticky;top:0;background:white;z-index:1">
+      <div class="modal-title" id="historyModalTitle">内容详情</div>
+      <button class="modal-close" onclick="closeHistoryModal()">✕</button>
+    </div>
+    <div class="modal-body" id="historyModalBody"></div>
+  </div>
+</div>
+
+<!-- ===== 主内容 ===== -->
+<main class="main">
+
+  <!-- ========== Tab1: 写稿工作台 ========== -->
+  <div class="tab-panel active" id="panel-generate">
+
+    <!-- 今日上下文看板 -->
+    <div class="context-banner" id="contextBanner">
+      <div class="context-banner-top">
+        <span style="font-size:20px">📅</span>
+        <span class="context-date" id="ctx-date"></span>
+        <span class="context-day-badge" id="ctx-day"></span>
+      </div>
+      <div class="context-themes" id="ctx-themes"></div>
+      <div class="context-gaps" id="ctx-gaps"></div>
+    </div>
+
+    <!-- 入口切换 -->
+    <div class="entry-switcher">
+      <button class="entry-btn active" id="entry-btn-1" onclick="switchEntry(1)">📝 我有初稿</button>
+      <button class="entry-btn inactive" id="entry-btn-2" onclick="switchEntry(2)">💡 给我选题</button>
+    </div>
+
+    <!-- 入口一：我有初稿 -->
+    <div id="entry-panel-1">
+      <div class="card">
+        <div class="card-body">
+          <!-- 来源象限 -->
+          <div class="form-group">
+            <label class="form-label">① 今天的来源象限</label>
+            <div class="pill-group">
+              <div class="pill selected" data-value="life" onclick="selectPill(this, 'sourceQuadrant')">生活→思考</div>
+              <div class="pill" data-value="study" onclick="selectPill(this, 'sourceQuadrant')">学习→启发</div>
+              <div class="pill" data-value="work" onclick="selectPill(this, 'sourceQuadrant')">工作→洞察</div>
+              <div class="pill" data-value="tool" onclick="selectPill(this, 'sourceQuadrant')">工具→赋能</div>
+            </div>
+          </div>
+
+          <!-- 正文 -->
+          <div class="form-group">
+            <label class="form-label">③ 正文（三段式）<span class="required">*</span></label>
+            <textarea class="form-textarea" id="f-body" rows="7" placeholder="三段式：&#10;1）发生了什么（来源）&#10;2）我怎么理解（洞察）&#10;3）未来怎么做（行动）&#10;&#10;字数不限，写够为止。"></textarea>
+            <div class="form-error" id="e-body">请填写正文</div>
+          </div>
+
+          <!-- 一句旗 -->
+          <div class="form-group">
+            <label class="form-label">④ 一句提炼（你的「旗」，选填）</label>
+            <input class="form-input" type="text" id="f-flag" placeholder="例如：陪伴不是时间，而是用心注视的那一刻">
+          </div>
+
+          <!-- 互动句 -->
+          <div class="form-group">
+            <label class="form-label">⑤ 和读者互动（选填）</label>
+            <input class="form-input" type="text" id="f-interaction" placeholder="例如：你今天的「旗」，是什么？">
+          </div>
+
+          <!-- 今日主题（正文下方，自动提炼） -->
+          <div class="form-group">
+            <label class="form-label">⑥ 今日主题（选填，未填则自动从正文提炼）</label>
+            <input class="form-input" type="text" id="f-topic" placeholder="填写后开始写稿，或留空让AI自动从正文提炼">
+          </div>
+
+          <!-- 主按钮 -->
+          <button class="btn-main" id="btn-write" onclick="startWriteFlow()">
+            <span id="btn-write-icon">✨</span>
+            <span id="btn-write-text">开始写稿</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 进度状态行 -->
+      <div id="write-status-area" style="display:none;margin-top:16px"></div>
+
+      <!-- 终稿输出区 -->
+      <div id="output-area" style="margin-top:20px"></div>
+    </div>
+
+    <!-- 入口二：给我选题 -->
+    <div id="entry-panel-2" style="display:none">
+      <!-- 模式切换 -->
+      <div style="margin-bottom:16px">
+        <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">选择写稿方式</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn-pill" id="mode-self" onclick="switchTopicMode('self')" style="flex:1">
+            ✍️ 自己写
+          </button>
+          <button class="btn-pill" id="mode-auto" onclick="switchTopicMode('auto')" style="flex:1">
+            🤖 AI自动写
+          </button>
+        </div>
+        <div id="mode-hint" style="font-size:12px;color:var(--text-muted);margin-top:8px">
+          选完选题后，填入正文再生成终稿
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div style="margin-bottom:16px">
+            <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:4px">💡 AI 选题推荐</div>
+            <div style="font-size:13px;color:var(--text-secondary)">基于你的周节奏、月主题和历史内容，为你推荐今天值得写的选题</div>
+          </div>
+          <button class="btn-main" id="btn-topic" onclick="runTopicSuggest()">
+            <span id="btn-topic-icon">🚀</span>
+            <span id="btn-topic-text">获取选题推荐</span>
+          </button>
+          <div id="topic-list" style="margin-top:16px"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panel-generate -->
+
+  <!-- ========== Tab2: 内容历史 ========== -->
+  <div class="tab-panel" id="panel-history">
+    <div class="card">
+      <div class="card-body" style="padding:0">
+        <!-- 筛选栏 -->
+        <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center" id="history-filter-bar">
+          <div class="pill selected" data-filter="all" onclick="filterHistory('all')" style="font-size:12px">全部</div>
+          <div class="pill" data-filter="life" onclick="filterHistory('life')" style="font-size:12px">🧘 人生感悟</div>
+          <div class="pill" data-filter="reading" onclick="filterHistory('reading')" style="font-size:12px">📖 读书学习</div>
+          <div class="pill" data-filter="business" onclick="filterHistory('business')" style="font-size:12px">💼 商业管理</div>
+          <div class="pill" data-filter="ai" onclick="filterHistory('ai')" style="font-size:12px">🤖 AI工具</div>
+          <div class="pill" data-filter="parenting" onclick="filterHistory('parenting')" style="font-size:12px">👨‍👦 父与子</div>
+        </div>
+        <!-- 列表 -->
+        <div id="history-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== Tab3: 900天进度 ========== -->
+  <div class="tab-panel" id="panel-progress">
+    <div style="display:flex;gap:20px;flex-wrap:wrap">
+      <!-- 左：进度概览 -->
+      <div style="width:340px;flex-shrink:0">
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-body" style="text-align:center;padding:40px 24px">
+            <div style="font-size:72px;font-weight:700;color:var(--brand-primary);margin-bottom:4px;line-height:1" id="prog-days">0</div>
+            <div style="font-size:16px;color:var(--text-secondary);margin-bottom:20px">天 / 900天</div>
+            <div style="width:100%;height:14px;background:#e2e8f0;border-radius:7px;overflow:hidden;margin-bottom:10px">
+              <div id="prog-bar" style="width:0%;height:100%;background:linear-gradient(90deg,var(--brand-primary),var(--brand-accent));border-radius:7px;transition:width 0.6s"></div>
+            </div>
+            <div style="font-size:14px;color:var(--text-secondary);margin-bottom:16px" id="prog-percent">0% 完成</div>
+            <div style="font-size:12px;color:var(--text-muted)" id="prog-start-date"></div>
+            <button class="btn-secondary" onclick="setStartDate()" style="margin-top:12px;font-size:12px">设置启动日期</button>
+          </div>
+        </div>
+        <div class="card">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:14px;font-weight:600">📅 本周节奏</div>
+          <div id="week-rhythm-list"></div>
+        </div>
+      </div>
+      <!-- 右：统计 -->
+      <div style="flex:1;min-width:0">
+        <div class="card" style="margin-bottom:16px">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:14px;font-weight:600">📊 内容统计</div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px">
+              <div style="text-align:center;padding:16px;background:rgba(139,92,246,0.08);border-radius:10px">
+                <div style="font-size:24px;margin-bottom:4px">🧘</div>
+                <div style="font-size:12px;color:var(--text-secondary)">人生感悟</div>
+                <div style="font-size:22px;font-weight:700;color:var(--line-life)" id="stat-life">0</div>
+              </div>
+              <div style="text-align:center;padding:16px;background:rgba(59,130,246,0.08);border-radius:10px">
+                <div style="font-size:24px;margin-bottom:4px">📖</div>
+                <div style="font-size:12px;color:var(--text-secondary)">读书学习</div>
+                <div style="font-size:22px;font-weight:700;color:var(--line-reading)" id="stat-reading">0</div>
+              </div>
+              <div style="text-align:center;padding:16px;background:rgba(245,158,11,0.08);border-radius:10px">
+                <div style="font-size:24px;margin-bottom:4px">💼</div>
+                <div style="font-size:12px;color:var(--text-secondary)">商业管理</div>
+                <div style="font-size:22px;font-weight:700;color:var(--line-business)" id="stat-business">0</div>
+              </div>
+              <div style="text-align:center;padding:16px;background:rgba(16,185,129,0.08);border-radius:10px">
+                <div style="font-size:24px;margin-bottom:4px">🤖</div>
+                <div style="font-size:12px;color:var(--text-secondary)">AI工具</div>
+                <div style="font-size:22px;font-weight:700;color:var(--line-ai)" id="stat-ai">0</div>
+              </div>
+              <div style="text-align:center;padding:16px;background:rgba(236,72,153,0.08);border-radius:10px">
+                <div style="font-size:24px;margin-bottom:4px">👨‍👦</div>
+                <div style="font-size:12px;color:var(--text-secondary)">父与子</div>
+                <div style="font-size:22px;font-weight:700;color:var(--line-parenting)" id="stat-parenting">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--border);font-size:14px;font-weight:600">🎯 月主题规划</div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px" id="month-themes-grid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ================================================================
+// API Key 自动初始化
+// ================================================================
+(function() {
+  // API Key 不再硬编码，首次使用请点右上角 ⚙️ 自行填写
+  if (!localStorage.getItem('start_date_900')) {
+    localStorage.setItem('start_date_900', new Date().toISOString());
+  }
+})();
+
+// ================================================================
+// 常量配置
+// ================================================================
+const MODEL_PROVIDERS = {
+  deepseek: {
+    name: 'DeepSeek',
+    endpoint: 'https://api.deepseek.com/chat/completions',
+    model: 'deepseek-chat'
+  },
+  zhipu: {
+    name: '智谱 GLM-4-Flash',
+    endpoint: 'https://open.bigmodel.cn/api/paas/v4/chat/completions',
+    model: 'glm-4-flash'
+  }
+};
+
+const MAIN_LINES = {
+  life:      { name: '人生感悟', icon: '🧘', color: '#8B5CF6', badge: 'badge-life' },
+  reading:   { name: '读书学习', icon: '📖', color: '#3B82F6', badge: 'badge-reading' },
+  business:  { name: '商业管理', icon: '💼', color: '#F59E0B', badge: 'badge-business' },
+  ai:        { name: 'AI工具',   icon: '🤖', color: '#10B981', badge: 'badge-ai' },
+  parenting: { name: '父与子',   icon: '👨‍👦', color: '#EC4899', badge: 'badge-parenting' }
+};
+
+const WEEK_RHYTHM = {
+  1: { name: '扬旗随笔', type: '温度', desc: '写内心深处的东西' },
+  2: { name: '自由创作', type: '自由', desc: '想写什么就写什么' },
+  3: { name: '学习笔记 & AI实践', type: '价值', desc: '读书、学习、AI精进' },
+  4: { name: '自由创作', type: '自由', desc: '想写什么就写什么' },
+  5: { name: '每周一旗·周记', type: '连接感', desc: '总结本周成长与反思' },
+  6: { name: '自由创作', type: '自由', desc: '想写什么就写什么' },
+  0: { name: '自由创作', type: '自由', desc: '想写什么就写什么' }
+};
+
+const MONTH_THEMES = [
+  { month: 1,  name: '行动觉醒', desc: '从思考到行动' },
+  { month: 2,  name: '阅读深潜', desc: '读书与笔记' },
+  { month: 3,  name: '商业洞察', desc: '创业心法' },
+  { month: 4,  name: '父与子', desc: '成长与陪伴' },
+  { month: 5,  name: 'AI精进', desc: '用AI提升自己' },
+  { month: 6,  name: '半年复盘', desc: '回顾与展望' },
+  { month: 7,  name: '夏日思考', desc: '深度思考季' },
+  { month: 8,  name: '效率提升', desc: '工具与方法' },
+  { month: 9,  name: '秋季沉淀', desc: '收获与总结' },
+  { month: 10, name: '关系经营', desc: '人际与连接' },
+  { month: 11, name: '年度冲刺', desc: '目标与执行' },
+  { month: 12, name: '岁末回顾', desc: '感恩与展望' }
+];
+
+// ================================================================
+// 主写稿 Agent 提示词（合并版 v1.6）
+// ================================================================
+const QUADRANT_TEXT = { life: '生活→思考', study: '学习→启发', work: '工作→洞察', tool: '工具→赋能' };
+
+function buildWriterPrompt(userInput) {
+  const { sourceQuadrant, topic, body, flag, interaction } = userInput;
+  return `你是一位资深公众号编辑，也是"扬旗而行"900天日更计划的执行者。
+
+你的任务：根据用户提供的初稿，一次性完成主线识别、结构优化、语言润色，最终输出可直接发布的公众号推文。
+
+【内容体系】
+5条主线：人生感悟(life)、读书学习(reading)、商业管理(business)、AI工具(ai)、父与子(parenting)
+周节奏：周一扬旗随笔(温度)、周三学习笔记&AI实践(价值)、周五周记(连接感)、其他自由
+月主题：根据当前月份自动判断
+
+【输入初稿】
+来源象限：${QUADRANT_TEXT[sourceQuadrant] || '生活→思考'}
+主题：${topic}
+正文：${body}
+一句提炼(旗)：${flag || '（用户未提供）'}
+读者互动：${interaction || '（用户未提供）'}
+
+【写作风格要求 - 高级编辑标准】
+写得像一个有阅历的编辑在和你说话，不是一个AI在套模板。要求：
+1. 开头：用场景/冲突/反直觉一句话抓住读者，不要"今天我想分享""在生活中"这种废话开头
+2. 中间：少用"第一/第二/第三"这种机械并列；多用自然的递进、对比、因果；有2-3处让人停下来想的句子
+3. 金句：用「」标注，每篇2-3处足够；宁可少一处，不要满篇都是"金句"
+4. 结尾：不喊口号，不写"以上就是我的分享/感谢阅读"；用一句话让读者带着东西走
+5. 整体节奏：段落长短交替，读起来有呼吸感，不要每段都一样长
+6. 【字数硬要求】正文必须不少于1600个汉字，AI生成时不得因追求"简洁"而压缩内容，内容跟质量走，质量过关则尽量充分展开
+7. 【内容具象化】禁止空洞抽象的说教！必须用具象场景、具体数字、真实细节来表达观点。比如：不说"要努力"，而是说"凌晨三点，你揉着眼睛关掉第六个闹钟"；不说"健康很重要"，而是说"你爸上次一口气爬三层楼，中间停下来扶了两次栏杆"。每个观点都要落地到具体的人、事、场景、数字。
+
+【排版规范 - 必须严格遵守】
+1. 段首无缩进，保持现代公众号风格
+2. 段落短小精悍，单段不超过80字（约3-4行）
+3. 【金句标注】整段都是金句（以「开头以」结尾），用「」完整标注
+4. 【转折高亮词】文中最多用3处「但是」「然而」「不过」等转折词，不要句句都强调
+5. 【最关键】段落之间必须用两个换行符（\n\n）分隔！每写完一段，空一行，再写下一段
+6. 禁止任何Markdown符号；加粗只用**1-3个词**，不要整句加粗
+7. 分节小标题单独成段（如"01""第一点""一、"，不要连在正文里）
+
+【输出要求】严格输出 JSON：
+{
+  "mainLine": "life/reading/business/ai/parenting（识别出的主线）",
+  "titles": [
+    { "title": "标题1（15-25字，有吸引力，能让人想点进来）", "reason": "推荐理由1（30字内）" },
+    { "title": "标题2（15-25字，有吸引力，能让人想点进来）", "reason": "推荐理由2（30字内）" },
+    { "title": "标题3（15-25字，有吸引力，能让人想点进来）", "reason": "推荐理由3（30字内）" }
+  ],
+  "digest": "首屏摘要（50-100字，包含文章亮点预告，让读者看完摘要愿意点击读正文。有悬念感/价值感，不剧透全文）",
+  "article": "完整正文（纯文本，段落之间用双换行符\\n\\n分隔。段首无缩进、单段不超过80字、金句用「」完整标注（整段以「开头以」结尾）、转折词最多3处。开头有hook、中间有递进或对比、结尾有力。禁止 # _ > 等Markdown符号；加粗只用**1-3个词**。正文不少于1600汉字，必须用具象场景、具体数字、真实细节来表达观点，禁止空洞抽象的说教）",
+  "flag": "一句提炼（最核心的那句话，20字内，有力量感。如果用户已提供了旗，可用原句或适当调整）",
+  "interaction": "读者互动问句（引发共鸣或评论的问题。如果用户提供了，用原句）",
+  "coverPrompts": [
+    "封面提示词1（16:9比例，中文为主，现代简约风格，视觉冲击力强，包含主题相关元素。重要：图片中不要出现任何文字，包括中文、英文、符号均不要出现，纯视觉构图）",
+    "封面提示词2（16:9比例，中文为主，现代简约风格，视觉冲击力强，包含主题相关元素。重要：图片中不要出现任何文字，包括中文、英文、符号均不要出现，纯视觉构图）",
+    "封面提示词3（16:9比例，中文为主，现代简约风格，视觉冲击力强，包含主题相关元素。重要：图片中不要出现任何文字，包括中文、英文、符号均不要出现，纯视觉构图）"
+  ]
+}`;
+}
+
+const COMPLIANCE_PROMPT = `你是一位内容合规审查专家，熟悉《网络安全法》《互联网信息服务管理办法》等法规。
+
+你的任务：审查公众号文章内容，识别潜在风险并给出修改建议。
+
+审查要点：敏感词、政治敏感、色情低俗、暴力恐怖、夸大广告、隐私泄露等。
+
+风险等级：low（无明显风险）、mid（有轻微风险建议优化）、high（有明显风险必须修改）
+
+输出格式（严格JSON）：
+{
+  "riskLevel": "low/mid/high",
+  "riskSummary": "一句话说明风险情况",
+  "riskItems": [
+    { "text": "有风险的原始文字片段", "reason": "违规原因", "suggestion": "修改建议" }
+  ]
+}`;
+
+// 选题+扩展模式
+let topicWriteMode = 'self'; // 'self' 自己写 / 'auto' AI自动写
+
+const TOPIC_PROMPT = `你是资深内容策划专家，擅长为个人公众号推荐选题。
+
+基于用户的900天日更规划，结合今日周节奏、月主题、历史发文情况，推荐6个高质量选题。
+
+输出格式（严格JSON数组）：
+[
+  {
+    "topic": "选题一句话（20字内，具体有画面感）",
+    "mainLine": "life/reading/business/ai/parenting",
+    "sourceQuadrant": "生活→思考/学习→启发/工作→洞察/工具→赋能",
+    "reason": "推荐理由（30字内，说明为什么适合今天）",
+    "hook": "建议开篇钩子句"
+  }
+]`;
+
+// 扩展主题为正文
+const EXPAND_TOPIC_PROMPT = `你是"扬旗而行"公众号的资深编辑，擅长写出有温度、有洞察的个人公众号文章。
+
+你的任务：用户给出一个主题方向，你需要基于这个方向，扩展为一篇完整的公众号推文正文。
+
+【写作风格要求】
+- 有温度：像朋友聊天，有真情实感
+- 有洞察：有自己的思考和提炼，不止于叙事
+- 段落短小：单段不超过3-4行，阅读节奏轻快
+- 段首无缩进：现代公众号风格
+- 金句用「」标注：突出重点句子
+
+【结构要求】
+严格三段式：
+1. 开头：用一个具体的场景/故事/感受引入（hook），快速抓住读者
+2. 中间：2-3段论述，讲清楚"我"的思考、观察、感悟
+3. 结尾：用一句有力的话升华或留下思考
+
+【字数】
+正文不少于1600汉字，内容必须具象化（用具象场景、具体数字、真实细节表达），禁止空洞抽象说教
+
+输出格式（严格JSON）：
+{
+  "body": "完整正文（纯文本，段落间用空行分隔，金句用「」标注，正文不少于1600汉字，禁止空洞抽象的表达）"
+}`;
+
+// ================================================================
+// 全局状态
+// ================================================================
+let currentProvider = 'deepseek';
+let isGenerating = false;
+let currentResult = null;
+let currentEntry = 1;
+let currentHistoryFilter = 'all';
+let _topicSuggestions = [];
+let _selectedTopic = null;
+let _selectedTitleIndex = -1;
+
+// ================================================================
+// 页面初始化
+// ================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  updateContextBanner();
+  // 初始化选题模式（默认：自己写）
+  switchTopicMode('self');
+});
+
+// ================================================================
+// 今日上下文看板
+// ================================================================
+function updateContextBanner() {
+  const now = new Date();
+  const weekDay = now.getDay();
+  const month = now.getMonth() + 1;
+  const day = now.getDate();
+  const weekDays = ['周日','周一','周二','周三','周四','周五','周六'];
+  const weekNum = Math.ceil((day + new Date(now.getFullYear(), month-1, 1).getDay()) / 7);
+
+  document.getElementById('ctx-date').textContent = `${month}月${day}日 ${weekDays[weekDay]}`;
+
+  const startDate = new Date(localStorage.getItem('start_date_900') || now);
+  const daysDiff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
+  const dayN = Math.max(1, daysDiff);
+  document.getElementById('ctx-day').textContent = `Day ${dayN} / 900`;
+
+  const rhythm = WEEK_RHYTHM[weekDay];
+  const monthTheme = MONTH_THEMES.find(m => m.month === month) || MONTH_THEMES[0];
+
+  document.getElementById('ctx-themes').innerHTML = `
+    <div class="context-theme-tag">
+      <span class="label">本周</span>
+      <span class="value">${rhythm.name}</span>
+    </div>
+    <div class="context-theme-tag">
+      <span class="label">本月</span>
+      <span class="value">${monthTheme.name}</span>
+    </div>
+    <div class="context-theme-tag">
+      <span class="label">调性</span>
+      <span class="value">${rhythm.type}</span>
+    </div>
+  `;
+
+  // 分析主线缺口
+  const history = getHistory();
+  const lineCounts = {};
+  Object.keys(MAIN_LINES).forEach(l => lineCounts[l] = 0);
+  history.forEach(h => { if (h.mainLine) lineCounts[h.mainLine]++; });
+  const total = Math.max(history.length, 1);
+  const gaps = Object.entries(lineCounts)
+    .sort((a, b) => a[1] - b[1])
+    .slice(0, 2)
+    .filter(([, v]) => v < total * 0.2)
+    .map(([k]) => MAIN_LINES[k]?.name)
+    .filter(Boolean);
+
+  const gapsEl = document.getElementById('ctx-gaps');
+  if (gaps.length > 0) {
+    gapsEl.innerHTML = `<span style="font-size:11px;opacity:0.6;margin-right:4px">最近较少涉及：</span>` +
+      gaps.map(g => `<span class="context-gap-tag">${g}</span>`).join('');
+    gapsEl.style.display = 'flex';
+  } else {
+    gapsEl.style.display = 'none';
+  }
+}
+
+// ================================================================
+// Tab 切换
+// ================================================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', ['generate','history','progress'][i] === tab);
+  });
+  document.querySelectorAll('.tab-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === `panel-${tab}`);
+  });
+  if (tab === 'history') renderHistory();
+  if (tab === 'progress') renderProgress();
+}
+
+// ================================================================
+// 入口切换
+// ================================================================
+function switchEntry(num) {
+  currentEntry = num;
+  document.getElementById('entry-btn-1').className = `entry-btn ${num===1?'active':'inactive'}`;
+  document.getElementById('entry-btn-2').className = `entry-btn ${num===2?'active':'inactive'}`;
+  document.getElementById('entry-panel-1').style.display = num === 1 ? 'block' : 'none';
+  document.getElementById('entry-panel-2').style.display = num === 2 ? 'block' : 'none';
+  if (num === 2) updateContextBanner();
+}
+
+// ================================================================
+// 胶囊选择器
+// ================================================================
+function selectPill(el, group) {
+  el.parentElement.querySelectorAll('.pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ================================================================
+// API Key 弹窗
+// ================================================================
+function openApiModal() {
+  document.getElementById('key-deepseek').value = localStorage.getItem('apikey_deepseek') || '';
+  document.getElementById('key-zhipu').value = localStorage.getItem('apikey_zhipu') || '';
+  document.getElementById('apiModal').classList.add('show');
+}
+function closeApiModal() { document.getElementById('apiModal').classList.remove('show'); }
+function saveApiKey() {
+  const kD = document.getElementById('key-deepseek').value.trim();
+  const kZ = document.getElementById('key-zhipu').value.trim();
+  if (kD) localStorage.setItem('apikey_deepseek', kD);
+  if (kZ) localStorage.setItem('apikey_zhipu', kZ);
+  closeApiModal();
+  showToast('API Key 已保存 ✓', 'success');
+}
+
+// ================================================================
+// LLM 调用
+// ================================================================
+async function callLLM(providerKey, systemPrompt, userContent, options = {}) {
+  const config = MODEL_PROVIDERS[providerKey];
+  if (!config) return { success: false, error: `未知 provider: ${providerKey}` };
+  const apiKey = localStorage.getItem(`apikey_${providerKey}`);
+  if (!apiKey) return { success: false, error: `未配置 ${config.name} API Key，请点击右上角 ⚙️ 设置` };
+
+  const maxTokens = options.max_tokens || 8000;
+  const temperature = options.temperature || 0.7;
+
+  try {
+    const resp = await fetch(config.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userContent }
+        ],
+        temperature,
+        max_tokens: maxTokens
+      })
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      return { success: false, error: `API 错误 ${resp.status}: ${err.error?.message || resp.statusText}` };
+    }
+    const data = await resp.json();
+    return { success: true, content: data.choices?.[0]?.message?.content || '' };
+  } catch (e) {
+    return { success: false, error: `网络错误: ${e.message}` };
+  }
+}
+
+// 流式调用（仅支持 DeepSeek）
+async function callLLMStream(providerKey, systemPrompt, userContent, onChunk, options = {}) {
+  const config = MODEL_PROVIDERS[providerKey];
+  if (!config) return { success: false, error: `未知 provider: ${providerKey}` };
+  const apiKey = localStorage.getItem(`apikey_${providerKey}`);
+  if (!apiKey) return { success: false, error: `未配置 ${config.name} API Key` };
+
+  const maxTokens = options.max_tokens || 8000;
+  try {
+    const resp = await fetch(config.endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        model: config.model,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userContent }
+        ],
+        temperature: 0.7,
+        max_tokens: maxTokens,
+        stream: true
+      })
+    });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({}));
+      return { success: false, error: `API 错误 ${resp.status}: ${err.error?.message || resp.statusText}` };
+    }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') continue;
+          try {
+            const json = JSON.parse(data);
+            const delta = json.choices?.[0]?.delta?.content;
+            if (delta) onChunk(delta);
+          } catch(e) {}
+        }
+      }
+    }
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: `网络错误: ${e.message}` };
+  }
+}
+
+// 从响应中提取 JSON（括号计数法，优先找最外层结构）
+function extractJSON(text) {
+  if (!text) throw new Error('内容为空');
+
+  // 清理 markdown 代码块
+  text = text.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+
+  // 括号计数法：找从指定字符开始的完整配对字符串
+  function extractBalanced(str, open, close) {
+    // 找最外层的 open 位置（不在字符串内）
+    let start = -1;
+    for (let i = 0; i < str.length; i++) {
+      if (str[i] === open) { start = i; break; }
+    }
+    if (start === -1) return null;
+    let depth = 0;
+    let inStr = false;
+    let escape = false;
+    for (let i = start; i < str.length; i++) {
+      const c = str[i];
+      if (escape) { escape = false; continue; }
+      if (c === '\\' && inStr) { escape = true; continue; }
+      if (c === '"') { inStr = !inStr; continue; }
+      if (inStr) continue;
+      if (c === open) depth++;
+      else if (c === close) {
+        depth--;
+        if (depth === 0) return str.slice(start, i + 1);
+      }
+    }
+    return null;
+  }
+
+  function tryParse(str) {
+    if (!str) return null;
+    try { return JSON.parse(str); } catch(e) {
+      // 修复尾随逗号
+      const fixed = str.replace(/,\s*([}\]])/g, '$1');
+      try { return JSON.parse(fixed); } catch(e2) { return null; }
+    }
+  }
+
+  // 找到 { 和 [ 各自的起始位置，优先选择更早出现的那个
+  const objStart = text.indexOf('{');
+  const arrStart = text.indexOf('[');
+
+  // 如果两者都存在，优先选位置更靠前的
+  if (objStart !== -1 && (arrStart === -1 || objStart <= arrStart)) {
+    const objStr = extractBalanced(text, '{', '}');
+    const r = tryParse(objStr);
+    if (r && typeof r === 'object' && !Array.isArray(r)) return r;
+  }
+
+  if (arrStart !== -1 && (objStart === -1 || arrStart <= objStart)) {
+    const arrStr = extractBalanced(text, '[', ']');
+    const r = tryParse(arrStr);
+    if (Array.isArray(r)) return r;
+  }
+
+  // 后备：各自再试一次
+  const objStr = extractBalanced(text, '{', '}');
+  const r1 = tryParse(objStr);
+  if (r1) return r1;
+
+  const arrStr = extractBalanced(text, '[', ']');
+  const r2 = tryParse(arrStr);
+  if (r2) return r2;
+
+  throw new Error('未找到有效JSON内容');
+}
+
+// HTML 转义
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// 从正文自动提炼今日主题（快速单轮调用）
+async function extractTopicFromBody(body) {
+  try {
+    const apikey = localStorage.getItem('apikey_deepseek');
+    const resp = await fetch('https://api.deepseek.com/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apikey}` },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        max_tokens: 30,
+        temperature: 0.7,
+        messages: [
+          { role: 'system', content: '你是一个标题提炼专家。用户的输入是一篇公众号草稿（可能是混乱的、片段式的），请从中提炼出一句话主题，要求：20字以内、有画面感、能引发共鸣、不喊口号。直接输出这句话，不要解释、不要引号、不要前缀。' },
+          { role: 'user', content: body }
+        ]
+      })
+    });
+    const data = await resp.json();
+    if (data.choices && data.choices[0] && data.choices[0].message && data.choices[0].message.content) {
+      return data.choices[0].message.content.trim().replace(/^["""'""']|["""'""']$/g, '');
+    }
+  } catch (e) { console.warn('主题提炼失败:', e); }
+  return '（未提炼出主题）';
+}
+
+// ================================================================
+// 主写稿流程 v1.6（1次主Agent + 1次并行合规审查）
+// ================================================================
+async function startWriteFlow() {
+  if (isGenerating) return;
+
+  const topic = document.getElementById('f-topic').value.trim();
+  const body = document.getElementById('f-body').value.trim();
+  const flag = document.getElementById('f-flag').value.trim();
+  const interaction = document.getElementById('f-interaction').value.trim();
+  const sourceQuadrantEl = document.querySelector('.pill.selected[data-value]');
+  const sourceQuadrant = sourceQuadrantEl ? sourceQuadrantEl.dataset.value : 'life';
+
+  // 表单校验（topic 选填，未填则自动提炼）
+  let valid = true;
+  document.getElementById('e-body').classList.remove('show');
+  document.getElementById('f-body').classList.remove('error');
+  if (!body) { document.getElementById('e-body').classList.add('show'); document.getElementById('f-body').classList.add('error'); valid = false; }
+  if (!valid) return;
+
+  // Topic 未填时，自动从正文中提炼
+  if (!topic && body) {
+    statusArea.innerHTML = `<div class="write-status"><div class="status-dot"></div><span id="write-status-text">正在从正文提炼主题…</span></div>`;
+    topic = await extractTopicFromBody(body);
+    document.getElementById('f-topic').value = topic;
+    statusArea.innerHTML = `<div class="write-status"><div class="status-dot"></div><span id="write-status-text">主题提炼完成：「${escHtml(topic)}」，开始写稿…</span></div>`;
+  }
+
+  // API Key 检查
+  if (!localStorage.getItem('apikey_deepseek')) {
+    showToast('请先配置 DeepSeek API Key ⚙️', 'error');
+    openApiModal();
+    return;
+  }
+
+  isGenerating = true;
+  _selectedTitleIndex = -1; // 每次写稿前重置标题选中状态
+  const btn = document.getElementById('btn-write');
+  btn.disabled = true;
+  document.getElementById('btn-write-icon').outerHTML = '<span class="spinner" id="btn-write-icon"></span>';
+  document.getElementById('btn-write-text').textContent = '正在写稿…';
+
+  // 清空输出区，显示进度状态
+  document.getElementById('output-area').innerHTML = '';
+  const statusArea = document.getElementById('write-status-area');
+  statusArea.style.display = 'block';
+  statusArea.innerHTML = `
+    <div class="write-status">
+      <div class="status-dot"></div>
+      <span id="write-status-text">正在写稿…</span>
+    </div>
+  `;
+
+  const now = new Date();
+  const userInput = { sourceQuadrant, topic, body, flag, interaction };
+
+  // 构建提示词
+  const systemPrompt = buildWriterPrompt({ sourceQuadrant, topic, body, flag, interaction });
+
+  // 流式输出预览容器（只创建一次，后续只更新文本）
+  const outEl = document.getElementById('output-area');
+  outEl.innerHTML = `
+    <div class="output-card" id="stream-preview-card">
+      <div class="output-body" style="padding:24px">
+        <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">⏳ 正在生成中，请稍候…</div>
+        <div id="stream-preview-text" class="output-article" style="font-size:13px;max-height:240px;overflow:hidden;white-space:pre-wrap"></div>
+        <span class="typing-cursor"></span>
+      </div>
+    </div>
+  `;
+
+  try {
+    // ---- 主Agent：一次完成全部写作 ----
+    document.getElementById('write-status-text').textContent = '正在写稿…';
+
+    let fullContent = '';
+    const streamTextEl = document.getElementById('stream-preview-text');
+    const result = await callLLMStream('deepseek', systemPrompt, '请直接输出JSON结果，不要有其他内容。', (chunk) => {
+      fullContent += chunk;
+      // 仅更新文本，不重建DOM
+      if (streamTextEl) streamTextEl.textContent = fullContent;
+    });
+
+    if (!result.success) throw new Error(result.error);
+
+    // 解析 JSON
+    let parsed;
+    try { parsed = extractJSON(fullContent); } catch(e) {
+      throw new Error(`AI输出格式异常，请重试。原始内容：${fullContent.substring(0, 100)}…`);
+    }
+
+    document.getElementById('write-status-text').textContent = '正在合规审查…';
+
+    // ---- 合规Agent：后台并行运行 ----
+    let complianceResult = { riskLevel: 'low', riskSummary: '未进行合规审查', riskItems: [] };
+    const complianceReq = callLLM('zhipu', COMPLIANCE_PROMPT, JSON.stringify(parsed, null, 2));
+    // 不阻塞，等待完成
+    complianceReq.then(r => {
+      if (r.success) {
+        try { complianceResult = extractJSON(r.content); } catch(e) {}
+      }
+      // 更新输出区的合规标签
+      const chip = document.getElementById('compliance-chip');
+      if (chip) {
+        chip.className = `compliance-chip ${complianceResult.riskLevel || 'low'}`;
+        const labels = { low: '✅ 合规通过', mid: '⚠️ 建议优化', high: '🚨 需修改' };
+        chip.innerHTML = labels[complianceResult.riskLevel] || '✅ 合规通过';
+      }
+    });
+
+    // ---- 保存记录 ----
+    const record = {
+      id: 'c_' + Date.now(),
+      createdAt: now.toISOString(),
+      date: now.toLocaleDateString('zh-CN'),
+      topic,
+      params: userInput,
+      mainLine: parsed.mainLine || 'life',
+      sourceQuadrant,
+      weekDay: now.getDay(),
+      monthTheme: MONTH_THEMES.find(m => m.month === now.getMonth() + 1)?.name || '',
+      output: {
+        title: parsed.title,
+        titles: parsed.titles || [],
+        digest: parsed.digest || '',
+        article: parsed.article,
+        flag: parsed.flag,
+        interaction: parsed.interaction,
+        subtitle: parsed.subtitle,
+        coverPrompts: parsed.coverPrompts || []
+      },
+      compliance: complianceResult,
+      status: 'draft'
+    };
+    saveHistory(record);
+    currentResult = record;
+
+    // ---- 渲染终稿 ----
+    renderOutput(record);
+    showToast('写稿完成 🎉', 'success');
+
+  } catch (e) {
+    document.getElementById('write-status-area').innerHTML = `
+      <div class="write-status" style="background:var(--danger-light);border-color:#fca5a5">
+        <div style="font-size:14px;color:var(--danger)">❌ ${escHtml(e.message)}</div>
+      </div>
+    `;
+    showToast(e.message, 'error');
+  } finally {
+    isGenerating = false;
+    const btn = document.getElementById('btn-write');
+    btn.disabled = false;
+    const iconEl = document.getElementById('btn-write-icon');
+    if (iconEl) iconEl.outerHTML = '<span id="btn-write-icon">✨</span>';
+    document.getElementById('btn-write-text').textContent = '开始写稿';
+  }
+}
+
+// ================================================================
+// 渲染终稿输出（v1.6 新设计）
+// ================================================================
+function renderOutput(record) {
+  const { output, mainLine, compliance } = record;
+  const lineInfo = MAIN_LINES[mainLine] || MAIN_LINES.life;
+  const riskLevel = compliance?.riskLevel || 'low';
+  const riskColors = { low: 'low', mid: 'mid', high: 'high' };
+  const riskLabels = { low: '✅ 合规通过', mid: '⚠️ 建议优化', high: '🚨 需修改' };
+
+  // 清理公众号格式，智能识别段落结构
+  // 参考微信公众号/heti排版规范：
+  // 正文字号16px，行高1.8，段落间距1.6em，段首无缩进
+  const cleanArticle = cleanWechatText(output?.article || '');
+
+  // 智能分段：优先用双换行分段，兜底按单行结构切分
+  function smartSplitParagraphs(text) {
+    // 方案1：双换行分段（AI标准输出）
+    const byDoubleNl = text.split(/\n{2,}/).map(p => p.trim()).filter(Boolean);
+    if (byDoubleNl.length > 1) return byDoubleNl;
+
+    // 方案2：全部是单行时，把每一行当一个段落
+    // 每行单独成段（单换行 = 独立段落，公众号常见写法）
+    const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+    if (lines.length > 1) return lines;
+
+    // 方案3：完全没有换行，按句号/感叹号/问号断句，每2-3句合成一段
+    const sentences = text.split(/(?<=[。！？!?])/).map(s => s.trim()).filter(Boolean);
+    if (sentences.length <= 1) return [text];
+
+    const paragraphs = [];
+    let buf = '';
+    let count = 0;
+    for (const s of sentences) {
+      buf += s;
+      count++;
+      // 每2-3句成一段，或者当前积累超过80字也断段
+      if (count >= 2 || buf.length >= 80) {
+        paragraphs.push(buf.trim());
+        buf = '';
+        count = 0;
+      }
+    }
+    if (buf.trim()) paragraphs.push(buf.trim());
+    return paragraphs.length > 0 ? paragraphs : [text];
+  }
+
+  // 按段落结构拆分（智能分段：双换行优先，兜底智能切分）
+  const paragraphs = smartSplitParagraphs(cleanArticle);
+
+  // 关键词/关键句高亮函数
+  function applyHighlights(text) {
+    // 先做HTML转义
+    let s = escHtml(text);
+
+    // 1. **加粗** 语法（AI可能输出的）→ <strong>
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight:700;color:#1a1a1a">$1</strong>');
+
+    // 2. 「」金句 → 暗红加粗
+    s = s.replace(/「([^」]+)」/g, '<strong class="gold-quote">「$1」</strong>');
+
+    // 3. 转折词高亮
+    ['但是','然而','不过','可是','其实','只是','偏偏','幸好'].forEach(w => {
+      s = s.replace(new RegExp(w, 'g'), `<strong class="kw-transition">${w}</strong>`);
+    });
+
+    // 4. 核心概念词高亮
+    ['关键','核心','本质','真正','最重要','最关键','第一性','元认知','反直觉','底层逻辑','洞察','智慧'].forEach(w => {
+      s = s.replace(new RegExp(w, 'g'), `<strong class="kw-core">${w}</strong>`);
+    });
+
+    // 5. 数字序词高亮
+    ['第一步','第二步','第三步','第四步','第五步','第一','第二','第三','第四','第五','第六','第七'].forEach(w => {
+      s = s.replace(new RegExp(w, 'g'), `<strong class="kw-num">${w}</strong>`);
+    });
+
+    return s;
+  }
+
+  // 判断一行是否是小标题（纯标题行特征：短、无句号结尾、可能含序号或特殊符号）
+  function isSubheading(line) {
+    const t = line.trim();
+    if (!t) return false;
+    // 已被HTML转义，要判断原始特征
+    // 小标题特征：长度 ≤ 20字，不以句号/逗号结尾，以数字/❶❷/一二三/【】开头
+    const plain = t.replace(/<[^>]+>/g, ''); // 去掉已有标签
+    if (plain.length > 30) return false;
+    if (/[，,。、；;：:]$/.test(plain)) return false;
+    if (/^[0-9０-９一二三四五六七八九十❶❷❸❹❺【〔\[（(]/.test(plain)) return true;
+    if (/^(开头|结尾|引言|总结|小结|正文|背景|原因|方法|结论|启示|反思)/.test(plain)) return true;
+    return false;
+  }
+
+  // 修复括号/书名号/引号内部被换行截断的问题
+  // 用状态机扫描字符，在"未配对的括号/引号内"遇到 \n 时，用空格替换
+  const mergeBreaksInsideBrackets = (str) => {
+    const opens  = ['（', '《', '【', '〔', '\u201c', '\u2018', '(', '[', '{'];
+    const closes = ['）', '》', '】', '〕', '\u201d', '\u2019', ')', ']', '}'];
+    const stack = [];
+    let result = '';
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      const oi = opens.indexOf(ch);
+      const ci = closes.indexOf(ch);
+      if (oi !== -1) { stack.push(oi); result += ch; }
+      else if (ci !== -1) {
+        const last = stack.lastIndexOf(ci);
+        if (last !== -1) stack.splice(last, 1);
+        result += ch;
+      } else if (ch === '\n' && stack.length > 0) {
+        result += ' ';
+      } else {
+        result += ch;
+      }
+    }
+    return result;
+  };
+
+  const articleHtml = (() => {
+    let kwCount = 0;
+    const kwLimit = 3;
+    let isFirstParagraph = true;
+
+    function applyHL(text) {
+      let s = escHtml(text);
+      s = s.replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight:700">$1</strong>');
+      s = s.replace(/「([^」]+)」/g, '<span class="gold-quote">「$1」</span>');
+      // 转折词限3处
+      if (kwCount < kwLimit) {
+        ['但是','然而','不过','可是','其实','只是','偏偏','幸好'].forEach(w => {
+          s = s.replace(new RegExp(w, 'g'), m => {
+            if (kwCount < kwLimit) { kwCount++; return `<strong class="kw-transition">${w}</strong>`; }
+            return m;
+          });
+        });
+      }
+      ['关键','核心','本质','真正','最重要','最关键','第一性','元认知','反直觉','底层逻辑','洞察','智慧'].forEach(w => {
+        s = s.replace(new RegExp(w, 'g'), `<strong class="kw-core">${w}</strong>`);
+      });
+      ['第一步','第二步','第三步','第四步','第五步','第一','第二','第三','第四','第五','第六','第七'].forEach(w => {
+        s = s.replace(new RegExp(w, 'g'), `<strong class="kw-num">${w}</strong>`);
+      });
+      return s;
+    }
+
+    function isFullQuotePara(text) {
+      return /^「.+」$/.test(text.trim());
+    }
+
+    return paragraphs.map(para => {
+      if (!para.trim()) return '';
+      const fixed = mergeBreaksInsideBrackets(para);
+      const lines = fixed.split('\n').map(l => l.trim()).filter(Boolean);
+      // 小标题
+      if (lines.length === 1 && isSubheading(lines[0])) {
+        return '<h3 class="article-subheading">' + applyHL(lines[0]) + '</h3>';
+      }
+      // 全金句段落 → 引用卡片
+      if (isFullQuotePara(fixed)) {
+        const inner = lines.map(l => applyHL(l)).join('<br>');
+        return `<div class="article-quote-block">${inner}</div>`;
+      }
+      // 普通段落
+      const inner = lines.map(l => applyHL(l)).join('<br>');
+      const cls = isFirstParagraph ? 'p article-lead' : 'p';
+      if (isFirstParagraph) isFirstParagraph = false;
+      return `<${cls}>${inner}</${cls}>`;
+    }).join('');
+  })();
+
+  // 默认选中第一个标题（提前到渲染之前）
+  if (_selectedTitleIndex === -1 && output?.titles && output.titles.length > 0) {
+    _selectedTitleIndex = 0;
+  }
+
+  // 标题推荐卡片（选中展开理由，未选中折叠）
+  const titlesHtml = output?.titles && output.titles.length > 0
+    ? output.titles.map((t, i) => {
+        const isSelected = i === _selectedTitleIndex;
+        return `
+        <div class="title-card ${isSelected ? 'selected' : ''}" id="title-card-${i}" onclick="selectTitle(${i})">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="title-card-index" style="flex-shrink:0;width:20px;height:20px;border-radius:50%;background:${isSelected?'rgba(255,255,255,0.25)':'var(--border)'};color:${isSelected?'white':'var(--text-secondary)'};font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center">${i+1}</span>
+            <span class="title-card-text" style="font-size:14px;font-weight:${isSelected?'700':'500'};color:${isSelected?'white':'var(--text-primary)'};flex:1;line-height:1.5">${escHtml(t.title)}</span>
+            <span style="font-size:12px;color:${isSelected?'rgba(255,255,255,0.7)':'var(--text-muted)'}">${isSelected?'✓ 已选':'点选'}</span>
+          </div>
+          <div class="title-card-reason" style="${isSelected?'display:block':'display:none'}">💡 ${escHtml(t.reason || '')}</div>
+        </div>`;
+      }).join('')
+    : '';
+
+  // 封面提示词卡片
+  const coverPromptsHtml = output?.coverPrompts && output.coverPrompts.length > 0
+    ? output.coverPrompts.map((p, i) => `
+        <div class="cover-prompt-card">
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">封面方案 ${i + 1}</div>
+          <div class="cover-prompt-text">${escHtml(p)}</div>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="btn-cover" onclick="copyCoverPrompt(${i})">📋 复制提示词</button>
+            <button class="btn-cover btn-cover-generate" onclick="generateCover(${i})">🎨 生成封面</button>
+          </div>
+        </div>
+      `).join('')
+    : '';
+
+  // 确定使用的标题
+  const selectedTitle = output?.titles && output.titles[_selectedTitleIndex]
+    ? output.titles[_selectedTitleIndex].title
+    : (output?.title || record.topic);
+
+  document.getElementById('write-status-area').style.display = 'none';
+  document.getElementById('output-area').innerHTML = `
+    <div class="output-card">
+      <!-- 输出头部 -->
+      <div class="output-header">
+        <div class="output-header-left">
+          <span class="output-header-title">📱 公众号终稿</span>
+          <span style="font-size:11px;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,0.25);color:white">${lineInfo.icon} ${lineInfo.name}</span>
+          <span id="compliance-chip" class="compliance-chip ${riskColors[riskLevel]}" style="background:rgba(255,255,255,0.2);color:white">${riskLabels[riskLevel]}</span>
+        </div>
+        <div class="output-header-actions">
+          <button class="btn-copy" style="background:rgba(255,255,255,0.25);color:white;border:1px solid rgba(255,255,255,0.4);font-weight:600" onclick="copyFullArticle()">📋 复制全文</button>
+        </div>
+      </div>
+
+      <!-- 正文 -->
+      <div class="output-body">
+
+        <!-- 标题推荐 -->
+        ${output?.titles && output.titles.length > 0 ? `
+        <div style="margin-bottom:20px">
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+            <span>🏷️</span> 标题推荐（点击选中）
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px" id="title-cards-container">
+            ${titlesHtml}
+          </div>
+        </div>
+        ` : `
+        <div class="output-title">${escHtml(selectedTitle)}</div>
+        `}
+
+        <!-- 首屏摘要 -->
+        ${output?.digest ? `
+        <div class="output-digest">
+          <div style="font-size:11px;font-weight:600;color:var(--brand-primary);margin-bottom:6px;display:flex;align-items:center;gap:4px">
+            <span>📌</span> 摘要
+          </div>
+          <div style="font-size:14px;color:var(--text-primary);line-height:1.6">${escHtml(output.digest)}</div>
+        </div>
+        ` : ''}
+
+        ${output?.subtitle && !output?.titles ? `<div class="output-subtitle">${escHtml(output.subtitle)}</div>` : ''}
+
+        <div class="output-article">${articleHtml}</div>
+
+        <!-- 迭代优化入口 -->
+        <div class="refine-section" id="refine-section" style="margin-top:24px;display:none">
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+            <span>✍️</span> 我再想想
+          </div>
+          <textarea id="refine-input" placeholder="说说你的想法，比如：&#x0a;• 第2段再加一个例子&#x0a;• 结尾太仓促，再深入一些&#x0a;• 这个比喻不太贴切，换一个&#x0a;输入后点「优化终稿」，AI会在原稿基础上改写"
+                   rows="4" style="width:100%;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;line-height:1.6;resize:vertical;box-sizing:border-box;font-family:inherit;color:var(--text-primary);background:var(--bg-input)"></textarea>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+            <button class="btn-main" style="font-size:13px;padding:8px 20px" id="btn-refine" onclick="submitRefine()">
+              <span id="btn-refine-text">✨ 优化终稿</span>
+            </button>
+            <span id="refine-hint" style="font-size:12px;color:var(--text-muted)">AI会在原稿基础上改写，保留其他内容不变</span>
+          </div>
+        </div>
+
+        ${output?.flag ? `
+        <div class="output-flag">
+          <div class="output-flag-label">🚩 一句提炼</div>
+          <div class="output-flag-text">${escHtml(output.flag)}</div>
+        </div>` : ''}
+
+        ${output?.interaction ? `
+        <div class="output-interaction">
+          <div class="output-interaction-label">💬 读者互动</div>
+          <div class="output-interaction-text">${escHtml(output.interaction)}</div>
+        </div>` : ''}
+
+        <!-- 重新排版入口 -->
+        <div class="layout-section" id="layout-section" style="margin-top:20px;display:none">
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;display:flex;align-items:center;gap:6px">
+            <span>🎨</span> 重新排版
+          </div>
+          <textarea id="layout-input" placeholder="说说排版要求，比如：&#x0a;• 段落再短一些，每段不超过3行&#x0a;• 开头再紧凑一点&#x0a;• 结尾换一种表达方式&#x0a;只改排版和表达方式，不改核心内容"
+                   rows="3" style="width:100%;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;line-height:1.6;resize:vertical;box-sizing:border-box;font-family:inherit;color:var(--text-primary);background:var(--bg-input)"></textarea>
+          <div style="margin-top:8px;display:flex;gap:8px;align-items:center">
+            <button class="btn-main" style="font-size:13px;padding:8px 20px" id="btn-layout" onclick="submitLayout()">
+              <span id="btn-layout-text">✨ 重新排版</span>
+            </button>
+            <span id="layout-hint" style="font-size:12px;color:var(--text-muted)">AI会保留原文内容，只调整排版和表达</span>
+          </div>
+        </div>
+
+        <!-- 封面提示词 -->
+        ${output?.coverPrompts && output.coverPrompts.length > 0 ? `
+        <div class="output-cover-section">
+          <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:12px;display:flex;align-items:center;gap:6px">
+            <span>🖼️</span> 封面提示词
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px" id="cover-prompts-container">
+            ${coverPromptsHtml}
+          </div>
+        </div>
+        ` : ''}
+      </div>
+
+      <!-- 底部操作 -->
+      <div class="output-footer" style="flex-direction:column;gap:8px">
+        <div style="display:flex;gap:8px">
+          <button class="btn-main" style="flex:1;font-size:15px;padding:14px;background:linear-gradient(135deg,#1e3a5f,#2d5a87);box-shadow:0 4px 12px rgba(30,58,95,0.3)" onclick="copyFullArticle()">
+            📋 复制全文发布
+          </button>
+          <button class="btn-secondary" onclick="markAsPublished()">✅ 标记已发布</button>
+          <button class="btn-secondary" onclick="document.getElementById('output-area').innerHTML=''">✕ 收起</button>
+        </div>
+      </div>
+    </div>
+  `;
+  // 显示迭代优化入口
+  document.getElementById('refine-section').style.display = 'block';
+  document.getElementById('layout-section').style.display = 'block';
+}
+
+// ================================================================
+// 标题选择
+// ================================================================
+function selectTitle(index) {
+  _selectedTitleIndex = index;
+
+  // 更新UI：遍历所有标题卡片
+  const container = document.getElementById('title-cards-container');
+  if (!container || !currentResult?.output?.titles) return;
+
+  container.querySelectorAll('.title-card').forEach((card, i) => {
+    const isSelected = i === index;
+    const textEl = card.querySelector('.title-card-text');
+    const reasonEl = card.querySelector('.title-card-reason');
+    const indexEl = card.querySelector('.title-card-index');
+    const statusEl = card.querySelector('.title-card-status');
+
+    if (isSelected) {
+      card.classList.add('selected');
+      if (textEl) { textEl.style.fontWeight = '700'; textEl.style.color = 'white'; }
+      if (reasonEl) reasonEl.style.display = 'block';
+      if (indexEl) { indexEl.style.background = 'rgba(255,255,255,0.25)'; indexEl.style.color = 'white'; }
+    } else {
+      card.classList.remove('selected');
+      if (textEl) { textEl.style.fontWeight = '500'; textEl.style.color = 'var(--text-primary)'; }
+      if (reasonEl) reasonEl.style.display = 'none';
+      if (indexEl) { indexEl.style.background = 'var(--border)'; indexEl.style.color = 'var(--text-secondary)'; }
+    }
+
+    // 更新状态文字
+    const spans = card.querySelectorAll('span');
+    spans.forEach(s => {
+      if (s.textContent === '✓ 已选' || s.textContent === '点选') {
+        s.textContent = isSelected ? '✓ 已选' : '点选';
+        s.style.color = isSelected ? 'rgba(255,255,255,0.7)' : 'var(--text-muted)';
+      }
+    });
+  });
+
+  showToast(`已选择标题 ${index + 1}`, 'success');
+}
+
+// ================================================================
+// 重新排版（不改内容，只改排版和表达）
+// ================================================================
+async function submitLayout() {
+  console.log('【排版开始】');
+  if (!currentResult) {
+    console.error('【排版失败】currentResult为空');
+    return;
+  }
+
+  const userLayout = document.getElementById('layout-input').value.trim();
+  console.log('【排版】用户输入:', userLayout);
+  if (!userLayout) {
+    showToast('请先输入排版要求', 'info');
+    return;
+  }
+
+  const btnText = document.getElementById('btn-layout-text');
+  const hint = document.getElementById('layout-hint');
+  const btn = document.getElementById('btn-layout');
+  btn.disabled = true;
+  btnText.textContent = '⏳ 排版中…';
+  hint.textContent = '正在重新排版，请稍候…';
+
+  const { output } = currentResult;
+  const currentArticle = output?.article || '';
+  console.log('【排版】当前正文长度:', currentArticle.length);
+
+  const layoutSystemPrompt = `你是"扬旗而行"公众号资深编辑，擅长排版优化。
+
+你的任务是：仔细阅读【用户排版意见】，严格按照意见对【当前正文】进行修改输出。
+
+【绝对禁止】
+- 不要原样返回原文！
+- 不要"保留"原文！
+- 不要"按要求调整"后再原样返回！
+- 如果用户要求"段落短一点"，你必须把长段落拆成2-3句一段！
+- 如果用户要求"开头精简"，你必须删减开头内容！
+- 如果用户什么都没提，就按默认规范重排一遍！
+
+【排版规范 - 必须严格遵守】
+- 段首无缩进：现代公众号风格
+- 段落短小精悍：单段不超过80字（约3-4行）
+- 金句用「」完整标注（整段金句以「开头以」结尾，最经典的公众号金句格式）
+- 转折词最多3处（「但是」「然而」「不过」等），不要句句强调
+- 分节小标题单独成段（如"01"、"第一点"、"一、"，不要连在正文里）
+- 【关键】段落之间必须用两个换行符（\\n\\n）分隔
+- 严格三段式：开头hook、中间论述、结尾升华
+- 【字数】正文不得少于1600汉字，重排时不得因调整表达而减少字数，内容必须充分展开
+- 【内容具象化】禁止空洞抽象！用具象场景、具体数字、真实细节来表达。不得以"精简"为由删除具体细节。
+
+【输出格式】严格JSON，直接输出，不要任何解释：
+{
+  "article": "完整修改后的正文（严格按用户意见修改，段落之间用\\n\\n分隔，正文不少于1600汉字，禁止空洞抽象的表达）",
+  "digest": "首屏摘要（如需修改则改，否则原样返回）"
+}`;
+
+  const userMessage = `【当前正文】
+${currentArticle}
+
+【用户排版意见】
+${userLayout}`;
+
+  try {
+    const statusEl = document.getElementById('layout-status') || (() => {
+      const el = document.createElement('div');
+      el.id = 'layout-status';
+      el.style.cssText = 'margin-top:8px;padding:10px;background:#f0fdf4;border-radius:8px;font-size:13px;color:#15803d;text-align:center;display:none';
+      hint.parentElement.appendChild(el);
+      return el;
+    })();
+    statusEl.textContent = '⏳ 正在排版…';
+    statusEl.style.display = 'block';
+
+    console.log('【排版】开始调用API...');
+    let fullContent = '';
+
+    const apiResult = await callLLMStream('deepseek', layoutSystemPrompt, userMessage, (chunk) => {
+      fullContent += chunk;
+    });
+
+    console.log('【排版】API调用完成，fullContent长度:', fullContent.length);
+    console.log('【排版】fullContent前200字:', fullContent.substring(0, 200));
+    console.log('【排版】API结果:', apiResult);
+
+    if (!apiResult?.success) {
+      console.error('【排版失败】API错误:', apiResult?.error);
+      showToast('❌ 排版失败：' + (apiResult?.error || 'API错误'), 'error');
+      btn.disabled = false;
+      btnText.textContent = '✨ 重新排版';
+      hint.textContent = 'AI会保留原文内容，只调整排版和表达';
+      statusEl.style.display = 'none';
+      return;
+    }
+
+    statusEl.textContent = '✅ 排版完成，正在更新…';
+
+    const refined = extractJSON(fullContent);
+    console.log('【排版】解析结果:', refined);
+
+    if (!refined || !refined.article) {
+      console.error('【排版失败】JSON解析失败或article为空');
+      showToast('⚠️ 解析失败，请查看控制台日志', 'error');
+      btn.disabled = false;
+      btnText.textContent = '✨ 重新排版';
+      hint.textContent = 'AI会保留原文内容，只调整排版和表达';
+      statusEl.style.display = 'none';
+      return;
+    }
+
+    // 检查内容是否真的变了（忽略换行差异，只比纯文字）
+    const oldText = currentArticle.replace(/\n/g, '').trim();
+    const newText = refined.article.replace(/\n/g, '').trim();
+    const changed = newText !== oldText;
+    console.log('【排版】内容是否变化:', changed, '新长度(去换行):', newText.length, '旧长度(去换行):', oldText.length);
+
+    // 只更新 article（和可选的 digest），不改其他字段
+    currentResult.output = {
+      ...currentResult.output,
+      article: refined.article,
+      digest: refined.digest !== undefined ? refined.digest : currentResult.output.digest,
+    };
+    console.log('【排版】currentResult.output.article已更新，新内容前100字:', refined.article.substring(0, 100));
+
+    // 更新历史记录
+    const history = getHistory();
+    const idx = history.findIndex(h => h.id === currentResult.id);
+    if (idx !== -1) {
+      history[idx].output = currentResult.output;
+      history[idx].updatedAt = new Date().toISOString();
+      localStorage.setItem('yangqi_history', JSON.stringify(history));
+      console.log('【排版】历史记录已更新');
+    }
+
+    document.getElementById('layout-input').value = '';
+    statusEl.style.display = 'none';
+    console.log('【排版】开始渲染...');
+    renderOutput(currentResult);
+    console.log('【排版】渲染完成');
+    showToast(changed ? '✅ 排版已更新（内容有变化）' : '⚠️ AI返回内容与原文基本相同，请尝试更具体的修改要求', changed ? 'success' : 'warning');
+
+  } catch(err) {
+    console.error('【排版异常】:', err);
+    showToast('排版失败：' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = '✨ 重新排版';
+    hint.textContent = 'AI会保留原文内容，只调整排版和表达';
+  }
+}
+
+// ================================================================
+// 迭代优化
+// ================================================================
+async function submitRefine() {
+  if (!currentResult) return;
+  const userThoughts = document.getElementById('refine-input').value.trim();
+  if (!userThoughts) {
+    showToast('请先输入你的思考或修改意见', 'info');
+    return;
+  }
+
+  const btnText = document.getElementById('btn-refine-text');
+  const hint = document.getElementById('refine-hint');
+  const btn = document.getElementById('btn-refine');
+  btn.disabled = true;
+  btnText.textContent = '⏳ 优化中…';
+  hint.textContent = '正在基于原稿改写，请稍候…';
+
+  const { output } = currentResult;
+
+  const refineSystemPrompt = `你是"扬旗而行"公众号资深编辑。用户会对一篇已完成的文章提出修改意见，你需要根据意见对文章进行改写优化。
+
+【排版规范 - 必须严格遵守】
+- 段首无缩进：现代公众号风格
+- 段落短小：单段不超过80字（约3-4行）
+- 金句用「」完整标注（整段金句以「开头以」结尾）
+- 转折词最多3处，不要句句强调
+- 分节小标题单独成段
+- 【关键】段落之间必须用两个换行符（\\n\\n）分隔
+- 禁止任何Markdown符号
+
+【输出格式要求】
+严格输出有效JSON，包含以下字段（只修改需要改的部分，其余保持原样）：
+{
+  "title": "标题（如需修改）",
+  "titles": [{"title":"标题","reason":"理由"}]（如需修改）,
+  "digest": "首屏摘要（如需修改）",
+  "article": "完整正文（严格保留段落结构，段落之间必须用双换行符\\n\\n分隔，金句用「」完整标注。段首无缩进、段落短小（≤80字）。字数跟内容走，不压缩不拉伸）",
+  "flag": "一句提炼（如需修改）",
+  "interaction": "读者互动（如需修改）",
+  "coverPrompts": ["提示词1（如需修改）","提示词2","提示词3"]
+}
+重要：
+1. article 必须是完整正文，不是 diff，不是"修改第X段"，是完整的、可直接发布的文章正文
+2. 只改有意见的部分，其他字段原样返回
+3. 输出必须是合法JSON，不要任何解释文字`;
+
+  const userMessage = `【原稿标题】${(output?.titles && output.titles[_selectedTitleIndex]?.title) || output?.title || currentResult.topic || ''}
+
+【原稿正文】
+${output?.article || ''}
+
+【原稿摘要】
+${output?.digest || ''}
+
+【原稿一句提炼】
+${output?.flag || ''}
+
+【原稿读者互动】
+${output?.interaction || ''}
+
+【用户修改意见】
+${userThoughts}`;
+
+  try {
+    let fullContent = '';
+    const streamEl = document.getElementById('refine-stream-indicator') || (() => {
+      const el = document.createElement('div');
+      el.id = 'refine-stream-indicator';
+      el.style.cssText = 'margin-top:10px;padding:12px;background:#f0f9ff;border-radius:8px;font-size:13px;color:#0369a1;text-align:center;display:none';
+      hint.parentElement.appendChild(el);
+      return el;
+    })();
+    streamEl.textContent = '⏳ 正在改写…';
+    streamEl.style.display = 'block';
+
+    await callLLMStream('deepseek', refineSystemPrompt, userMessage, (chunk) => {
+      fullContent += chunk;
+      streamEl.textContent = '⏳ 正在解析改写结果…';
+    });
+
+    streamEl.textContent = '✅ 改写完成，正在更新…';
+
+    const refined = extractJSON(fullContent);
+
+    // 更新 currentResult
+    currentResult.output = {
+      ...currentResult.output,
+      article: refined.article || currentResult.output.article,
+      titles: refined.titles || currentResult.output.titles,
+      title: refined.title || currentResult.output.title,
+      digest: refined.digest !== undefined ? refined.digest : currentResult.output.digest,
+      flag: refined.flag !== undefined ? refined.flag : currentResult.output.flag,
+      interaction: refined.interaction !== undefined ? refined.interaction : currentResult.output.interaction,
+      coverPrompts: refined.coverPrompts || currentResult.output.coverPrompts,
+    };
+
+    // 更新历史记录
+    const history = getHistory();
+    const idx = history.findIndex(h => h.id === currentResult.id);
+    if (idx !== -1) {
+      history[idx].output = currentResult.output;
+      history[idx].updatedAt = new Date().toISOString();
+      localStorage.setItem('yangqi_history', JSON.stringify(history));
+    }
+
+    // 清空输入框，重新渲染
+    document.getElementById('refine-input').value = '';
+    streamEl.style.display = 'none';
+
+    renderOutput(currentResult);
+    showToast('✅ 终稿已更新', 'success');
+
+  } catch(err) {
+    showToast('优化失败：' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btnText.textContent = '✨ 优化终稿';
+    hint.textContent = 'AI会在原稿基础上改写，保留其他内容不变';
+  }
+}
+// ================================================================
+function copyCoverPrompt(index) {
+  if (!currentResult || !currentResult.output?.coverPrompts) return;
+  const prompt = currentResult.output.coverPrompts[index];
+  if (!prompt) return;
+  copyText(prompt, '封面提示词已复制 ✓');
+}
+
+// ================================================================
+// 生成封面（智谱 CogView-4）
+// ================================================================
+async function generateCover(index) {
+  if (!currentResult || !currentResult.output?.coverPrompts) return;
+  const promptText = currentResult.output.coverPrompts[index];
+  if (!promptText) return;
+
+  // 查找对应的卡片
+  const cards = document.querySelectorAll('.cover-prompt-card');
+  if (!cards[index]) return;
+  const card = cards[index];
+
+  // 找到按钮
+  const btn = card.querySelector('.btn-cover-generate');
+  const setBtnLoading = function(txt) {
+    if (btn) {
+      btn.textContent = txt;
+      if (txt.indexOf('...') > -1) btn.classList.add('cover-generating');
+      else btn.classList.remove('cover-generating');
+    }
+  };
+
+  // 显示预览区域
+  var previewEl = card.querySelector('.cover-image-preview');
+  if (!previewEl) {
+    previewEl = document.createElement('div');
+    previewEl.className = 'cover-image-preview';
+    previewEl.style.cssText = 'margin-top:10px;border-radius:8px;overflow:hidden;background:#f3f4f6;display:none';
+    var btnRow = card.querySelector('div[style*="display:flex"]');
+    if (btnRow) card.insertBefore(previewEl, btnRow);
+    else card.appendChild(previewEl);
+  }
+  previewEl.style.display = 'block';
+  previewEl.innerHTML = '<div style="padding:20px;text-align:center;color:#6b7280"><div style="font-size:13px">&#x23F3; 正在生成封面（约15-20秒）...</div><div style="margin-top:8px"><span class="spinner" style="display:inline-block;width:20px;height:20px"></span></div></div>';
+
+  setBtnLoading('生成中...');
+
+  try {
+    var resp = await fetch('http://localhost:8765/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: promptText + '。图片中不要出现任何文字，纯视觉构图。'
+      })
+    });
+
+    if (!resp.ok) {
+      var errData = null;
+      try { errData = await resp.json(); } catch(e) {}
+      throw new Error(errData && errData.error ? errData.error : '请求失败 ' + resp.status);
+    }
+
+    var respData = await resp.json();
+    var imageUrl = respData.url;
+
+    previewEl.innerHTML =
+      '<div style="position:relative">' +
+        '<img src="' + imageUrl + '" alt="封面图" style="width:100%;display:block;border-radius:8px"' +
+        ' onerror="this.parentElement.innerHTML=\'<div style=padding:16px;color:#ef4444;font-size:13px>图片加载失败，请复制链接到浏览器打开</div>\'">' +
+        '<div style="padding:8px 12px;background:rgba(0,0,0,0.6);display:flex;justify-content:space-between;align-items:center">' +
+          '<span style="font-size:11px;color:white">&#x2705; 封面生成成功</span>' +
+          '<a href="' + imageUrl + '" download="封面图.jpg"' +
+          ' style="font-size:11px;color:#10b981;font-weight:600;text-decoration:none;background:rgba(255,255,255,0.9);padding:3px 10px;border-radius:12px">' +
+          '&#x2B07; 下载封面</a>' +
+        '</div>' +
+      '</div>';
+
+    setBtnLoading('重新生成');
+    showToast('封面生成成功！点击下载保存', 'success');
+
+  } catch(err) {
+    previewEl.innerHTML = '<div style="padding:16px;text-align:center;color:#ef4444;font-size:13px">生成失败：' + escHtml(err.message) + '</div>';
+    setBtnLoading('重试');
+    showToast('封面生成失败：' + err.message, 'error');
+  }
+}
+
+// ================================================================
+// 通用复制工具（兼容 http/https，本地文件协议）
+// ================================================================
+function copyText(text, successMsg) {
+  if (!text) { showToast('暂无内容可复制', 'error'); return; }
+  successMsg = successMsg || '已复制到剪贴板 ✓';
+
+  // 优先用 Clipboard API（需要 https 或 localhost）
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text).then(() => {
+      showToast(successMsg, 'success');
+    }).catch(() => {
+      _fallbackCopy(text, successMsg);
+    });
+  } else {
+    _fallbackCopy(text, successMsg);
+  }
+}
+
+function _fallbackCopy(text, successMsg) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.setAttribute('readonly', '');
+  ta.style.cssText = 'position:fixed;top:0;left:0;width:2em;height:2em;padding:0;border:none;outline:none;box-shadow:none;background:transparent;opacity:0;z-index:-1';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  // iOS 兼容
+  if (ta.setSelectionRange) ta.setSelectionRange(0, ta.value.length);
+  try {
+    const ok = document.execCommand('copy');
+    showToast(ok ? successMsg : '复制失败，请手动选择文本复制', ok ? 'success' : 'error');
+  } catch(e) {
+    showToast('复制失败，请手动选择文本复制', 'error');
+  }
+  document.body.removeChild(ta);
+}
+
+function buildArticleHtml(articleText) {
+  if (!articleText) return '';
+
+  function esc(t) {
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function mergeBrackets(str) {
+    const opens  = ['\uff08','\u300a','\u3010','\u3014','"',"'",'(','[','{'];
+    const closes = ['\uff09','\u300b','\u3011','\u3015','"',"'",')',']','}'];
+    const stack = [];
+    let r = '';
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      const oi = opens.indexOf(ch);
+      const ci = closes.indexOf(ch);
+      if (oi !== -1) { stack.push(oi); r += ch; }
+      else if (ci !== -1) {
+        const last = stack.lastIndexOf(ci);
+        if (last !== -1) stack.splice(last, 1);
+        r += ch;
+      } else if (ch === '\n' && stack.length > 0) { r += ' '; }
+      else { r += ch; }
+    }
+    return r;
+  }
+
+  function isSubheading(line) {
+    const t = line.trim().replace(/<[^>]+>/g, '');
+    if (t.length > 30) return false;
+    if (/[,\u3001\u3002\u3001\uff1b\uff1a:]$/.test(t)) return false;
+    if (/^[0-9\uff10-\uff19\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u2460-\u2469\u3010\u3014\uff08(]/.test(t)) return true;
+    if (/^(\u5f00\u5934|\u7ed3\u5c3e|\u5f15\u8a00|\u603b\u7ed3|\u5c0f\u7ed3|\u6b63\u6587|\u80cc\u666f|\u539f\u56e0|\u65b9\u6cd5|\u7ed3\u8bba|\u542f\u793a|\u53cd\u601d)/.test(t)) return true;
+    return false;
+  }
+
+  function isFullQuotePara(text) {
+    return /^\u300c.+》$/.test(text.trim());
+  }
+
+  function isNumberSection(t) {
+    return /^[0-9\uff10-\uff19]{1,2}[\u3001.\uff0e]/.test(t) || /^[一二三四五六七八九十\u2460-\u2469]+[\u3001.\uff0e]/.test(t);
+  }
+
+  let kwCount = 0, kwLimit = 3;
+  function applyHL(t) {
+    let s = esc(t);
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    s = s.replace(/\u300c([^》]+)》/g, '<strong style="color:#B8741A;font-weight:700">\u300c$1\u300d</strong>');
+    if (kwCount < kwLimit) {
+      ['\u4f46\u662f','\u7136\u800c','\u4e0d\u8fc7','\u53ef\u662f','\u5176\u5b9e','\u53ea\u662f','\u504f\u504f','\u5e78\u597d'].forEach(w => {
+        s = s.replace(new RegExp(w, 'g'), m => {
+          if (kwCount < kwLimit) { kwCount++; return '<strong style="color:#1E3A5F">'+w+'</strong>'; }
+          return m;
+        });
+      });
+    }
+    ['\u5173\u952e','\u6838\u5fc3','\u672c\u8d28','\u771f\u6b63','\u6700\u91cd\u8981','\u6700\u5173\u952e','\u7b2c\u4e00\u6027','\u5143\u8ba4\u77e5','\u53cd\u76f4\u89c9','\u5e95\u5c42\u903b\u8f91','\u6d1e\u5bdf','\u667a\u6167'].forEach(w => {
+      s = s.replace(new RegExp(w, 'g'), '<strong style="color:#888;font-weight:600">'+w+'</strong>');
+    });
+    ['\u7b2c\u4e00\u6b65','\u7b2c\u4e8c\u6b65','\u7b2c\u4e09\u6b65','\u7b2c\u56db\u6b65','\u7b2c\u4e94\u6b65','\u7b2c\u4e00','\u7b2c\u4e8c','\u7b2c\u4e09','\u7b2c\u56db','\u7b2c\u4e94','\u7b2c\u516d','\u7b2c\u4e03'].forEach(w => {
+      s = s.replace(new RegExp(w, 'g'), '<strong style="color:#888;font-weight:600">'+w+'</strong>');
+    });
+    return s;
+  }
+
+  let isFirst = true;
+  let prevWasHeading = false;
+
+  const rawParas = articleText.split(/\n{2,}/).map(p => p.trim()).filter(p => p);
+  const result = rawParas.map(para => {
+    if (!para.trim()) return '';
+    const fixed = mergeBrackets(para.trim());
+    const lines = fixed.split('\n').map(l => l.trim()).filter(Boolean);
+
+    if (lines.length === 1 && isSubheading(lines[0])) {
+      prevWasHeading = true;
+      const txt = applyHL(lines[0]);
+      const isNum = isNumberSection(lines[0].trim());
+      if (isNum) {
+        return '<p style="font-size:18px;font-weight:700;color:#1E3A5F;margin:2em 0 0.6em 0;padding:0 0 8px 0;border-bottom:1px solid #eee;letter-spacing:0.02em">'+txt+'</p>';
+      }
+      return '<p style="font-size:16px;font-weight:700;color:#1E3A5F;margin:1.6em 0 0.5em 0;padding-left:10px;border-left:3px solid #D4A574;letter-spacing:0.01em">'+txt+'</p>';
+    }
+
+    if (isFullQuotePara(fixed)) {
+      prevWasHeading = false;
+      return '<p style="margin:1.6em 0;padding:16px 20px;background:#FAFAF8;border-left:4px solid #D4A574;font-style:normal;font-size:15px;color:#444;line-height:1.9;letter-spacing:0.01em">'+lines.map(l=>applyHL(l)).join('<br>')+'</p>';
+    }
+
+    const inner = lines.map(l=>applyHL(l)).join('<br>');
+    if (isFirst) {
+      isFirst = false;
+      prevWasHeading = false;
+      return '<p style="font-size:16px;color:#2a2a2a;line-height:1.95;margin:0 0 1.6em 0;letter-spacing:0.015em">'+inner+'</p>';
+    }
+
+    const extraTop = prevWasHeading ? 'margin-top:0.4em;' : '';
+    prevWasHeading = false;
+    return '<p style="font-size:15px;color:#3a3a3a;line-height:1.9;margin:0 0 1.4em 0;letter-spacing:0.01em;'+extraTop+'">'+inner+'</p>';
+  });
+
+  return result.join('');
+}
+
+
+// ================================================================
+// 复制全文（HTML富文本格式，粘贴到公众号有排版效果）
+// ================================================================
+async function copyFullArticle() {
+  if (!currentResult) { showToast('\u6682\u65e0\u5185\u5bb9', 'error'); return; }
+  const { output } = currentResult;
+  const selectedTitle = output?.titles && output.titles[_selectedTitleIndex]
+    ? output.titles[_selectedTitleIndex].title : (output?.title || '');
+
+  const esc = t => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const titleHtml   = selectedTitle ? '<p style="font-size:22px;font-weight:700;color:#1E3A5F;margin:0 0 16px 0;text-align:center;line-height:1.4">'+esc(selectedTitle)+'</p>' : '';
+  const digestHtml  = output?.digest ? '<p style="font-size:14px;color:#888;margin:0 0 16px 0;padding:10px 16px;background:#f8f8f8;border-left:3px solid #D4A574;font-style:italic;line-height:1.7">'+esc(output.digest)+'</p>' : '';
+  const articleHtml = buildArticleHtml(output?.article || '');
+  const flagHtml    = output?.flag ? '<p style="margin-top:20px;font-size:14px;color:#D4A574;font-weight:600">\ud83d\udc6a '+esc(output.flag)+'</p>' : '';
+  const interHtml   = output?.interaction ? '<p style="margin-top:6px;font-size:14px;color:#888">\ud83d\udcac '+esc(output.interaction)+'</p>' : '';
+  const fullHtml = '<div style="font-family:\u5fae\u8f6f\u96c5\u9ed1,Microsoft YaHei,sans-serif;font-size:16px;line-height:1.85;color:#3a3a3a;max-width:680px;margin:0 auto;padding:20px 16px">'+titleHtml+digestHtml+articleHtml+flagHtml+interHtml+'</div>';
+  const plainText = [selectedTitle, output?.digest, output?.article ? cleanWechatText(output.article) : '', output?.flag ? '\ud83d\udc6a '+output.flag : '', output?.interaction ? '\ud83d\udcac '+output.interaction : ''].filter(Boolean).join('\n\n').trim();
+
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      const blob = new Blob([fullHtml], { type: 'text/html' });
+      const ptBlob = new Blob([plainText], { type: 'text/plain' });
+      const item = new ClipboardItem({ 'text/html': blob, 'text/plain': ptBlob });
+      await navigator.clipboard.write([item]);
+      showToast('\u5df2\u590d\u5236\uff08\u5bcc\u6587\u672c\uff09\u2713 \u53ef\u76f4\u63a5\u7c98\u8d34\u53d1\u5e03', 'success');
+    } else {
+      copyText(plainText, '\u5df2\u590d\u5236 \u2713 \u53ef\u76f4\u63a5\u7c98\u8d34\u53d1\u5e03');
+    }
+  } catch(e) {
+    copyText(plainText, '\u5df2\u590d\u5236 \u2713 \u53ef\u76f4\u63a5\u7c98\u8d34\u53d1\u5e03');
+  }
+}
+
+// ================================================================
+// 标记已发布
+// ================================================================
+function markAsPublished() {
+  if (!currentResult) return;
+  const history = getHistory();
+  const idx = history.findIndex(h => h.id === currentResult.id);
+  if (idx !== -1) {
+    history[idx].status = 'published';
+    localStorage.setItem('yangqi_history', JSON.stringify(history));
+    currentResult.status = 'published';
+    showToast('已标记为发布 ✓', 'success');
+  }
+}
+
+// ================================================================
+// 清理公众号文本
+// ================================================================
+function cleanWechatText(text) {
+  if (!text) return '';
+  return text
+    .replace(/^\d+\.\s*/gm, '')
+    .replace(/^#+\s*/gm, '')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/_([^_]+)_/g, '$1')
+    .replace(/^>\s*/gm, '')
+    .replace(/^[-+*]\s+/gm, '')
+    .replace(/\[[^\]]+\]\([^)]+\)/g, (_, t) => t)
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/\s+$/gm, '')
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+    .trim();
+}
+
+// ================================================================
+// 选题推荐（入口二）
+// ================================================================
+async function runTopicSuggest() {
+  const btn = document.getElementById('btn-topic');
+  btn.disabled = true;
+  document.getElementById('btn-topic-icon').outerHTML = '<span class="spinner" id="btn-topic-icon"></span>';
+  document.getElementById('btn-topic-text').textContent = '正在思考选题…';
+
+  const now = new Date();
+  const weekDay = now.getDay();
+  const month = now.getMonth() + 1;
+  const rhythm = WEEK_RHYTHM[weekDay];
+  const monthTheme = MONTH_THEMES.find(m => m.month === month) || MONTH_THEMES[0];
+  const history = getHistory();
+  const lineCounts = {};
+  Object.keys(MAIN_LINES).forEach(l => lineCounts[l] = 0);
+  history.forEach(h => { if (h.mainLine) lineCounts[h.mainLine]++; });
+
+  const userMsg = `当前时间：${now.getFullYear()}年${month}月${now.getDate()}日 星期${['日','一','二','三','四','五','六'][weekDay]}
+
+今日周节奏：${rhythm.name}（${rhythm.type}）- ${rhythm.desc}
+本月主题：${monthTheme.name} - ${monthTheme.desc}
+
+各主线历史发文数：
+${Object.entries(lineCounts).map(([k,v]) => `- ${MAIN_LINES[k].name}: ${v}篇`).join('\n')}
+
+请生成6个选题推荐。`;
+
+  const listEl = document.getElementById('topic-list');
+  listEl.innerHTML = `<div class="write-status"><div class="status-dot"></div><span>AI 正在为你推荐选题…</span></div>`;
+
+  try {
+    const result = await callLLM('deepseek', TOPIC_PROMPT, userMsg);
+    if (!result.success) throw new Error(result.error);
+
+    const suggestions = extractJSON(result.content);
+    if (!Array.isArray(suggestions)) throw new Error('格式错误');
+
+    _topicSuggestions = suggestions;
+    listEl.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:16px">
+      ${suggestions.map((s, i) => {
+        const line = MAIN_LINES[s.mainLine] || MAIN_LINES.life;
+        return `
+        <div class="suggest-card" onclick="useTopic(${i})">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <span style="font-size:18px">${line.icon}</span>
+            <span style="font-size:11px;padding:2px 8px;border-radius:20px;background:${line.color}15;color:${line.color};font-weight:600">${line.name}</span>
+          </div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:8px;line-height:1.4">${escHtml(s.topic)}</div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">💡 ${escHtml(s.reason)}</div>
+          <div style="font-size:12px;color:var(--brand-primary);background:var(--brand-primary-light);border-radius:6px;padding:8px;font-style:italic">"${escHtml(s.hook)}"</div>
+          <div style="margin-top:10px;font-size:12px;color:var(--text-muted)">点击使用此选题 →</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  } catch(e) {
+    listEl.innerHTML = `<div style="padding:16px;text-align:center;color:var(--danger);font-size:13px">获取推荐失败：${escHtml(e.message)}</div>`;
+    showToast(e.message, 'error');
+  } finally {
+    btn.disabled = false;
+    const iconEl = document.getElementById('btn-topic-icon');
+    if (iconEl) iconEl.outerHTML = '<span id="btn-topic-icon">🚀</span>';
+    document.getElementById('btn-topic-text').textContent = '获取选题推荐';
+  }
+}
+
+// 使用选题
+function useTopic(index) {
+  const s = _topicSuggestions[index];
+  if (!s) return;
+
+  // 保存选题信息到全局
+  _selectedTopic = s;
+
+  if (topicWriteMode === 'auto') {
+    // AI自动写模式：直接开始写稿
+    showToast(`🤖 已选择「AI自动写」，正在为你扩展正文…`, 'info');
+    startAutoWriteFlow(s.topic, s.mainLine, s.sourceQuadrant);
+  } else {
+    // 自己写模式：切换到入口一，填入选题
+    switchEntry(1);
+    document.getElementById('f-topic').value = s.topic;
+    // 设置来源象限
+    const qMap = { '生活': 'life', '学习': 'study', '工作': 'work', '工具': 'tool' };
+    const qVal = qMap[s.sourceQuadrant?.split('→')[0].trim()] || 'life';
+    // 重置所有pill选中状态
+    document.querySelectorAll('#entry-panel-1 .pill').forEach(p => p.classList.remove('selected'));
+    // 匹配正确的来源象限pill
+    document.querySelectorAll('#entry-panel-1 .pill[data-value]').forEach(p => {
+      p.classList.toggle('selected', p.dataset.value === qVal);
+    });
+    showToast(`选题已填入：${s.topic}，开始你的创作吧`, 'success');
+  }
+}
+
+// 切换写稿模式
+function switchTopicMode(mode) {
+  topicWriteMode = mode;
+  const hintEl = document.getElementById('mode-hint');
+  const btnSelf = document.getElementById('mode-self');
+  const btnAuto = document.getElementById('mode-auto');
+
+  if (mode === 'self') {
+    btnSelf.classList.add('active');
+    btnAuto.classList.remove('active');
+    hintEl.textContent = '选完选题后，填入正文再生成终稿';
+  } else {
+    btnAuto.classList.add('active');
+    btnSelf.classList.remove('active');
+    hintEl.textContent = '选完选题后，AI全自动扩展正文并生成终稿';
+  }
+}
+
+// AI全自动写稿流程
+async function startAutoWriteFlow(topic, mainLine, sourceQuadrant) {
+  if (isGenerating) return;
+
+  // API Key 检查
+  if (!localStorage.getItem('apikey_deepseek')) {
+    showToast('请先配置 DeepSeek API Key ⚙️', 'error');
+    openApiModal();
+    return;
+  }
+
+  isGenerating = true;
+  _selectedTitleIndex = -1; // 重置标题选中状态
+
+  // 切换到入口一，显示状态
+  switchEntry(1);
+  document.getElementById('f-topic').value = topic;
+  document.getElementById('f-body').value = '';
+  document.getElementById('f-flag').value = '';
+  document.getElementById('f-interaction').value = '';
+
+  // 设置来源象限
+  const qMap = { '生活': 'life', '学习': 'study', '工作': 'work', '工具': 'tool' };
+  const qVal = qMap[sourceQuadrant?.split('→')[0].trim()] || 'life';
+  document.querySelectorAll('#entry-panel-1 .pill').forEach(p => p.classList.remove('selected'));
+  document.querySelectorAll('#entry-panel-1 .pill[data-value]').forEach(p => {
+    p.classList.toggle('selected', p.dataset.value === qVal);
+  });
+
+  // 清空输出区，显示进度
+  document.getElementById('output-area').innerHTML = '';
+  const statusArea = document.getElementById('write-status-area');
+  statusArea.style.display = 'block';
+  statusArea.innerHTML = `
+    <div class="write-status">
+      <div class="status-dot"></div>
+      <span id="write-status-text">🤖 AI 正在扩展正文…</span>
+    </div>
+  `;
+
+  try {
+    // Step 1: 扩展主题为正文
+    document.getElementById('write-status-text').textContent = '🤖 AI 正在扩展正文…';
+
+    const expandResult = await callLLM('deepseek', EXPAND_TOPIC_PROMPT, `请基于以下主题，扩展为一篇完整的公众号推文正文：\n\n主题：${topic}`);
+
+    if (!expandResult.success) throw new Error(expandResult.error);
+
+    const expandData = extractJSON(expandResult.content);
+    const body = expandData.body || expandData.article; // 兼容旧数据
+
+    // 将扩展的正文填入表单
+    document.getElementById('f-body').value = body;
+
+    // Step 2: 生成终稿
+    document.getElementById('write-status-text').textContent = '✨ 正在生成终稿…';
+
+    // 复用 startWriteFlow 的逻辑
+    const btn = document.getElementById('btn-write');
+    btn.disabled = true;
+    document.getElementById('btn-write-icon').outerHTML = '<span class="spinner" id="btn-write-icon"></span>';
+    document.getElementById('btn-write-text').textContent = '正在写稿…';
+
+    // 重建流式预览容器
+    document.getElementById('output-area').innerHTML = `
+      <div class="output-card" id="stream-preview-card">
+        <div class="output-body" style="padding:24px">
+          <div style="font-size:13px;color:var(--text-secondary);margin-bottom:10px">⏳ 正在生成终稿，请稍候…</div>
+          <div id="stream-preview-text" class="output-article" style="font-size:13px;max-height:240px;overflow:hidden;white-space:pre-wrap"></div>
+          <span class="typing-cursor"></span>
+        </div>
+      </div>
+    `;
+
+    const sourceQuadrantEl = document.querySelector('.pill.selected[data-value]');
+    const sq = sourceQuadrantEl ? sourceQuadrantEl.dataset.value : 'life';
+    const userInput = { sourceQuadrant: sq, topic, body, flag: '', interaction: '' };
+    const systemPrompt = buildWriterPrompt(userInput);
+
+    let fullContent = '';
+    const streamTextEl2 = document.getElementById('stream-preview-text');
+    const result = await callLLMStream('deepseek', systemPrompt, '请直接输出JSON结果，不要有其他内容。', (chunk) => {
+      fullContent += chunk;
+      if (streamTextEl2) streamTextEl2.textContent = fullContent;
+    });
+
+    if (!result.success) throw new Error(result.error);
+
+    // 解析 JSON
+    let parsed;
+    try { parsed = extractJSON(fullContent); } catch(e) {
+      throw new Error(`AI输出格式异常，请重试。原始内容：${fullContent.substring(0, 100)}…`);
+    }
+
+    document.getElementById('write-status-text').textContent = '正在合规审查…';
+
+    // 合规审查（后台并行）
+    let complianceResult = { riskLevel: 'low', riskSummary: '未进行合规审查', riskItems: [] };
+    const complianceReq = callLLM('zhipu', COMPLIANCE_PROMPT, JSON.stringify(parsed, null, 2));
+    complianceReq.then(r => {
+      if (r.success) {
+        try { complianceResult = extractJSON(r.content); } catch(e) {}
+      }
+      const chip = document.getElementById('compliance-chip');
+      if (chip) {
+        chip.className = `compliance-chip ${complianceResult.riskLevel || 'low'}`;
+        const labels = { low: '✅ 合规通过', mid: '⚠️ 建议优化', high: '🚨 需修改' };
+        chip.textContent = labels[complianceResult.riskLevel] || '✅ 合规通过';
+      }
+    });
+
+    // 保存结果
+    const now = new Date();
+    const record = {
+      id: 'c_' + Date.now(),
+      createdAt: now.toISOString(),
+      date: now.toLocaleDateString('zh-CN'),
+      topic,
+      params: { topic, body, sourceQuadrant: sq, flag: '', interaction: '' },
+      mainLine: parsed.mainLine || mainLine || 'life',
+      sourceQuadrant: sq,
+      weekDay: now.getDay(),
+      monthTheme: MONTH_THEMES.find(m => m.month === now.getMonth() + 1)?.name || '',
+      output: {
+        title: parsed.title,
+        titles: parsed.titles || [],
+        digest: parsed.digest || '',
+        article: parsed.article,
+        flag: parsed.flag || '',
+        interaction: parsed.interaction || '',
+        subtitle: parsed.subtitle || '',
+        coverPrompts: parsed.coverPrompts || []
+      },
+      compliance: complianceResult,
+      status: 'draft'
+    };
+    currentResult = record;
+    saveHistory(record);
+
+    // 渲染输出
+    renderOutput(record);
+
+    showToast('✨ 终稿生成完成！', 'success');
+
+  } catch(e) {
+    showToast(e.message, 'error');
+    document.getElementById('write-status-area').style.display = 'none';
+    document.getElementById('output-area').innerHTML = `<div style="padding:20px;text-align:center;color:var(--danger)">生成失败：${escHtml(e.message)}</div>`;
+  } finally {
+    isGenerating = false;
+    const btn = document.getElementById('btn-write');
+    if (btn) {
+      btn.disabled = false;
+      const iconEl = document.getElementById('btn-write-icon');
+      if (iconEl) iconEl.outerHTML = '<span id="btn-write-icon">✍️</span>';
+      document.getElementById('btn-write-text').textContent = '生成终稿';
+    }
+  }
+}
+
+// ================================================================
+// 内容历史
+// ================================================================
+function getHistory() {
+  try { return JSON.parse(localStorage.getItem('yangqi_history') || '[]'); } catch(e) { return []; }
+}
+
+function saveHistory(record) {
+  const history = getHistory();
+  history.unshift(record);
+  localStorage.setItem('yangqi_history', JSON.stringify(history.slice(0, 200)));
+}
+
+function renderHistory() {
+  const all = getHistory();
+  const filtered = currentHistoryFilter === 'all' ? all : all.filter(h => h.mainLine === currentHistoryFilter);
+  const listEl = document.getElementById('history-list');
+
+  if (!filtered.length) {
+    listEl.innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">还没有内容</div>
+        <div class="empty-desc">写完稿子后会出现在这里</div>
+      </div>`;
+    return;
+  }
+
+  const weekDays = ['周日','周一','周二','周三','周四','周五','周六'];
+  listEl.innerHTML = filtered.map(r => {
+    const line = MAIN_LINES[r.mainLine] || MAIN_LINES.life;
+    const date = new Date(r.createdAt);
+    const dateStr = `${date.getMonth()+1}/${date.getDate()} ${weekDays[date.getDay()]}`;
+    const title = (r.output?.titles && r.output.titles[0]?.title) || r.output?.title || r.topic || '无标题';
+    const published = r.status === 'published';
+    return `
+    <div class="history-item" onclick="openHistoryRecord('${r.id}')">
+      <span style="font-size:16px">${line.icon}</span>
+      <span class="history-topic">${escHtml(title)}</span>
+      <span class="badge ${line.badge}">${line.name}</span>
+      ${published ? '<span class="badge badge-green">已发布</span>' : ''}
+      <span class="history-meta">${dateStr}</span>
+    </div>`;
+  }).join('');
+}
+
+function filterHistory(filter) {
+  currentHistoryFilter = filter;
+  document.querySelectorAll('#history-filter-bar .pill').forEach(p => {
+    p.classList.toggle('selected', p.dataset.filter === filter);
+  });
+  renderHistory();
+}
+
+function openHistoryRecord(id) {
+  const history = getHistory();
+  const r = history.find(h => h.id === id);
+  if (!r) return;
+
+  const line = MAIN_LINES[r.mainLine] || MAIN_LINES.life;
+  const date = new Date(r.createdAt);
+  const weekDays = ['周日','周一','周二','周三','周四','周五','周六'];
+  const dateStr = `${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日 ${weekDays[date.getDay()]}`;
+
+  const clean = cleanWechatText(r.output?.article || '');
+  const historyTitle = (r.output?.titles && r.output.titles[0]?.title) || r.output?.title || r.topic || '内容详情';
+  let text = '';
+  if (historyTitle) text += historyTitle + '\n\n';
+  if (r.output?.article) text += clean + '\n\n';
+  if (r.output?.flag) text += '🚩 ' + r.output.flag + '\n\n';
+  if (r.output?.interaction) text += '💬 ' + r.output.interaction;
+
+  document.getElementById('historyModalTitle').textContent = historyTitle;
+  document.getElementById('historyModalBody').innerHTML = `
+    <div style="margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="badge ${line.badge}">${line.icon} ${line.name}</span>
+      <span style="font-size:12px;color:var(--text-secondary);padding:3px 0">${dateStr}</span>
+      ${r.status === 'published' ? '<span class="badge badge-green">已发布</span>' : ''}
+    </div>
+    ${historyTitle ? `<div style="font-size:16px;font-weight:700;margin-bottom:12px;color:var(--text-primary)">${escHtml(historyTitle)}</div>` : ''}
+    <div style="background:#fafafa;border:1px solid var(--border);border-radius:10px;padding:16px;white-space:pre-wrap;font-size:14px;line-height:1.9;margin-bottom:12px">${escHtml(text)}</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-main" style="font-size:13px;padding:10px" onclick="copyHistoryText('${r.id}')">📋 复制全文</button>
+      ${r.status !== 'published' ? `<button class="btn-secondary" onclick="markHistoryPublished('${r.id}')">✅ 标记发布</button>` : ''}
+    </div>`;
+  document.getElementById('historyModal').classList.add('show');
+}
+
+function closeHistoryModal() { document.getElementById('historyModal').classList.remove('show'); }
+
+function copyHistoryText(id) {
+  const r = getHistory().find(h => h.id === id);
+  if (!r) return;
+  let text = '';
+  // 兼容新旧数据结构：titles 优先，fallback 到 title
+  const title = (r.output?.titles && r.output.titles[0]?.title) || r.output?.title || '';
+  if (title) text += title + '\n\n';
+  if (r.output?.digest) text += r.output.digest + '\n\n';
+  if (r.output?.article) text += cleanWechatText(r.output.article) + '\n\n';
+  if (r.output?.flag) text += '🚩 ' + r.output.flag + '\n\n';
+  if (r.output?.interaction) text += '💬 ' + r.output.interaction;
+  copyText(text.trim(), '已复制 ✓');
+}
+
+function markHistoryPublished(id) {
+  const history = getHistory();
+  const idx = history.findIndex(h => h.id === id);
+  if (idx !== -1) { history[idx].status = 'published'; localStorage.setItem('yangqi_history', JSON.stringify(history)); }
+  renderHistory();
+  const btn = document.querySelector('[onclick="markHistoryPublished(\'' + id + '\')"]');
+  if (btn) btn.textContent = '✓ 已发布';
+  showToast('已标记发布 ✓', 'success');
+}
+
+// ================================================================
+// 900天进度
+// ================================================================
+function renderProgress() {
+  const now = new Date();
+  const startDate = new Date(localStorage.getItem('start_date_900') || now);
+  const daysDiff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24)) + 1;
+  const dayN = Math.max(1, daysDiff);
+  const pct = Math.round(dayN / 900 * 100);
+
+  document.getElementById('prog-days').textContent = dayN;
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-percent').textContent = pct + '% 完成';
+  document.getElementById('prog-start-date').textContent = `起点：${startDate.toLocaleDateString('zh-CN')}`;
+
+  // 历史统计
+  const history = getHistory();
+  const lineCounts = {};
+  Object.keys(MAIN_LINES).forEach(l => lineCounts[l] = 0);
+  history.forEach(h => { if (h.mainLine) lineCounts[h.mainLine]++; });
+  Object.keys(MAIN_LINES).forEach(l => {
+    const el = document.getElementById(`stat-${l}`);
+    if (el) el.textContent = lineCounts[l];
+  });
+
+  // 周节奏
+  const weekDays = ['周日','周一','周二','周三','周四','周五','周六'];
+  const today = now.getDay();
+  const rhythmList = document.getElementById('week-rhythm-list');
+  rhythmList.innerHTML = Object.entries(WEEK_RHYTHM).map(([d, r]) => {
+    const dayNum = parseInt(d);
+    const isToday = dayNum === today;
+    return `
+    <div style="padding:10px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;${isToday?'background:var(--brand-primary-light)':''}">
+      <span style="font-size:14px;width:36px;text-align:center;font-weight:${isToday?'700':'400'};color:${isToday?'var(--brand-primary)':''}">${weekDays[dayNum]}</span>
+      <span style="font-size:13px;font-weight:${isToday?'600':'400'};flex:1;color:${isToday?'var(--brand-primary)':'var(--text-primary)'}">${r.name}</span>
+      ${isToday ? '<span style="font-size:10px;padding:2px 6px;border-radius:10px;background:var(--brand-primary);color:white;font-weight:600">今天</span>' : ''}
+    </div>`;
+  }).join('');
+
+  // 月主题
+  const grid = document.getElementById('month-themes-grid');
+  grid.innerHTML = MONTH_THEMES.map(m => {
+    const isCurrent = m.month === now.getMonth() + 1;
+    return `
+    <div style="padding:12px;border-radius:8px;border:1.5px solid ${isCurrent?'var(--brand-primary)': 'var(--border)'};background:${isCurrent?'var(--brand-primary-light)': '#fafafa'}">
+      <div style="font-size:12px;font-weight:700;color:${isCurrent?'var(--brand-primary)':'var(--text-secondary)'};margin-bottom:2px">${m.month}月</div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-primary)">${m.name}</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-top:2px">${m.desc}</div>
+    </div>`;
+  }).join('');
+}
+
+function setStartDate() {
+  const existing = localStorage.getItem('start_date_900') || new Date().toISOString().slice(0, 10);
+  const val = prompt('请输入900天起始日期（如：2024-01-01）：', existing.slice(0, 10));
+  if (val && /^\d{4}-\d{2}-\d{2}$/.test(val)) {
+    localStorage.setItem('start_date_900', val + 'T00:00:00.000Z');
+    updateContextBanner();
+    renderProgress();
+    showToast('起点日期已设置 ✓', 'success');
+  }
+}
+
+// ================================================================
+// Toast 通知
+// ================================================================
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (type ? ' ' + type : '');
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ================================================================
+// 折叠区
+// ================================================================
+function toggleCollapse(header) {
+  header.closest('.collapse-section').classList.toggle('open');
+}
+</script>
+</body>
+</html>
