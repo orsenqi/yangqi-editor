@@ -1,0 +1,315 @@
+/* =============================================
+   扬旗而行 · 高级感主题
+   Yangqi Premium Theme for doocs/md
+   ============================================= */
+
+/* ---- 预览区正文样式覆盖 ---- */
+
+/* 公众号白底卡片式排版 */
+[data-v-2b70853d] .preview {
+    background: #FAFAF8 !important;
+    padding: 36px 40px !important;
+    max-width: 677px !important;
+    margin: 0 auto !important;
+    border-radius: 2px;
+}
+
+/* 正文 */
+[data-v-2b70853d] .preview,
+.output_day .preview {
+    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif CN", "Source Han Serif SC", STSong, "SimSun", serif !important;
+    font-size: 15px !important;
+    line-height: 1.85 !important;
+    color: #2C2C2E !important;
+    letter-spacing: 0.02em;
+    text-align: justify;
+}
+
+/* 标题层级 */
+.output_day .preview h1,
+[data-v-2b70853d] .preview h1 {
+    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif CN", "Microsoft YaHei", sans-serif !important;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    color: #1A1A1E !important;
+    margin: 32px 0 16px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 2px solid #8B5CF6 !important;
+    letter-spacing: 0.04em;
+    line-height: 1.4 !important;
+}
+
+.output_day .preview h2,
+[data-v-2b70853d] .preview h2 {
+    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif CN", "Microsoft YaHei", sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    color: #2A2A2E !important;
+    margin: 28px 0 12px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid #E8E4F0 !important;
+    letter-spacing: 0.03em;
+    line-height: 1.5 !important;
+}
+
+.output_day .preview h3,
+[data-v-2b70853d] .preview h3 {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    color: #4A4A5A !important;
+    margin: 20px 0 8px !important;
+    padding-left: 12px !important;
+    border-left: 3px solid #8B5CF6 !important;
+    letter-spacing: 0.02em;
+}
+
+/* 段落 */
+.output_day .preview p,
+[data-v-2b70853d] .preview p {
+    margin: 0 0 16px !important;
+    text-indent: 0 !important;
+    line-height: 1.85 !important;
+}
+
+/* 引用块（金句） */
+.output_day .preview blockquote,
+[data-v-2b70853d] .preview blockquote {
+    margin: 20px 0 !important;
+    padding: 16px 20px !important;
+    background: #F5F0FF !important;
+    border-left: 4px solid #8B5CF6 !important;
+    border-radius: 0 8px 8px 0 !important;
+    font-style: normal !important;
+    color: #4A3F6B !important;
+}
+
+.output_day .preview blockquote p,
+[data-v-2b70853d] .preview blockquote p {
+    margin: 0 !important;
+    font-size: 14.5px !important;
+    line-height: 1.8 !important;
+    color: #4A3F6B !important;
+}
+
+/* 加粗 */
+.output_day .preview strong,
+[data-v-2b70853d] .preview strong {
+    color: #6D28D9 !important;
+    font-weight: 600 !important;
+}
+
+/* 链接 */
+.output_day .preview a,
+[data-v-2b70853d] .preview a {
+    color: #7C3AED !important;
+    text-decoration: none !important;
+    border-bottom: 1px solid #C4B5FD !important;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.output_day .preview a:hover,
+[data-v-2b70853d] .preview a:hover {
+    color: #6D28D9 !important;
+    border-bottom-color: #8B5CF6 !important;
+}
+
+/* 无序列表 */
+.output_day .preview ul,
+[data-v-2b70853d] .preview ul {
+    margin: 12px 0 16px !important;
+    padding-left: 0 !important;
+    list-style: none !important;
+}
+
+.output_day .preview ul li,
+[data-v-2b70853d] .preview ul li {
+    position: relative !important;
+    padding-left: 20px !important;
+    margin-bottom: 8px !important;
+    line-height: 1.8 !important;
+    color: #2C2C2E !important;
+}
+
+.output_day .preview ul li::before,
+[data-v-2b70853d] .preview ul li::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 4px !important;
+    top: 10px !important;
+    width: 6px !important;
+    height: 6px !important;
+    background: #8B5CF6 !important;
+    border-radius: 50% !important;
+}
+
+/* 有序列表 */
+.output_day .preview ol,
+[data-v-2b70853d] .preview ol {
+    margin: 12px 0 16px !important;
+    padding-left: 0 !important;
+    counter-reset: ol-counter !important;
+    list-style: none !important;
+}
+
+.output_day .preview ol li,
+[data-v-2b70853d] .preview ol li {
+    position: relative !important;
+    padding-left: 28px !important;
+    margin-bottom: 8px !important;
+    counter-increment: ol-counter !important;
+    line-height: 1.8 !important;
+    color: #2C2C2E !important;
+}
+
+.output_day .preview ol li::before,
+[data-v-2b70853d] .preview ol li::before {
+    content: counter(ol-counter) " ." !important;
+    position: absolute !important;
+    left: 0 !important;
+    color: #8B5CF6 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+}
+
+/* 分割线 */
+.output_day .preview hr,
+[data-v-2b70853d] .preview hr {
+    border: none !important;
+    border-top: 1px dashed #E0D8F5 !important;
+    margin: 28px 0 !important;
+}
+
+/* 图片 */
+.output_day .preview img,
+[data-v-2b70853d] .preview img {
+    border-radius: 6px !important;
+    max-width: 100% !important;
+    margin: 16px auto !important;
+    display: block !important;
+    box-shadow: 0 2px 12px rgba(139, 92, 246, 0.12) !important;
+}
+
+/* 表格 */
+.output_day .preview table,
+[data-v-2b70853d] .preview table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin: 16px 0 !important;
+    font-size: 14px !important;
+    border-radius: 6px !important;
+    overflow: hidden !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+
+.output_day .preview table th,
+[data-v-2b70853d] .preview table th {
+    background: #F5F0FF !important;
+    color: #4A3A6B !important;
+    font-weight: 600 !important;
+    padding: 10px 14px !important;
+    border: 1px solid #E8E0F5 !important;
+    text-align: left !important;
+}
+
+.output_day .preview table td,
+[data-v-2b70853d] .preview table td {
+    padding: 9px 14px !important;
+    border: 1px solid #EDE8F5 !important;
+    color: #2C2C2E !important;
+}
+
+.output_day .preview table tr:nth-child(even) td,
+[data-v-2b70853d] .preview table tr:nth-child(even) td {
+    background: #FAFAF8 !important;
+}
+
+/* 代码行内 */
+.output_day .preview code:not(pre code),
+[data-v-2b70853d] .preview code:not(pre code) {
+    background: #F3F0FF !important;
+    color: #6D28D9 !important;
+    padding: 2px 6px !important;
+    border-radius: 4px !important;
+    font-size: 13px !important;
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace !important;
+}
+
+/* 代码块 */
+.output_day .preview pre,
+[data-v-2b70853d] .preview pre {
+    background: #1E1B2E !important;
+    border-radius: 8px !important;
+    padding: 18px 20px !important;
+    margin: 16px 0 !important;
+    overflow-x: auto !important;
+    border: 1px solid #2D2850 !important;
+}
+
+.output_day .preview pre code,
+[data-v-2b70853d] .preview pre code {
+    background: none !important;
+    color: #C4B5FD !important;
+    font-size: 13px !important;
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace !important;
+    padding: 0 !important;
+}
+
+/* 暗色模式适配 */
+html.dark .output_night .preview {
+    background: #14121A !important;
+}
+
+html.dark .output_night .preview h1 {
+    color: #EDE9FE !important;
+    border-bottom-color: #8B5CF6 !important;
+}
+
+html.dark .output_night .preview h2 {
+    color: #DDD6FE !important;
+    border-bottom-color: #3B2A5A !important;
+}
+
+html.dark .output_night .preview h3 {
+    color: #C4B5FD !important;
+    border-left-color: #8B5CF6 !important;
+}
+
+html.dark .output_night .preview p,
+html.dark .output_night .preview li {
+    color: #D1D5DB !important;
+}
+
+html.dark .output_night .preview blockquote {
+    background: #1E1B2E !important;
+    border-left-color: #8B5CF6 !important;
+}
+
+html.dark .output_night .preview blockquote p {
+    color: #C4B5FD !important;
+}
+
+html.dark .output_night .preview table th {
+    background: #1E1B2E !important;
+    color: #DDD6FE !important;
+    border-color: #3B2A5A !important;
+}
+
+html.dark .output_night .preview table td {
+    color: #D1D5DB !important;
+    border-color: #2D2850 !important;
+}
+
+/* ---- 侧边工具栏品牌色 ---- */
+
+/* 主按钮 */
+button.bg-primary,
+.btn-primary {
+    background-color: #8B5CF6 !important;
+    border-color: #8B5CF6 !important;
+}
+
+button.bg-primary:hover,
+.btn-primary:hover {
+    background-color: #7C3AED !important;
+    border-color: #7C3AED !important;
+}
