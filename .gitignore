@@ -1,0 +1,16 @@
+
+# 排除内部工作目录
+.workbuddy/
+
+# 排除版本历史（文件太大）
+versions/
+
+# 排除备份
+backup/
+
+# 排除BAT脚本（云端不需要）
+*.bat
+
+# 排除Python缓存
+__pycache__/
+*.pyc
